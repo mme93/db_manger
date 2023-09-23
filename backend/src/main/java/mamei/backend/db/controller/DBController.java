@@ -15,7 +15,7 @@ import java.sql.*;
 @RequestMapping("/general")
 public class DBController {
 
-
+    /*
     private final DBService dbService;
 
     public DBController(DBService dbService) {
@@ -31,7 +31,7 @@ public class DBController {
     public ResponseEntity<String> getTest() {
         try {
             //String url = "jdbc:mysql://217.160.26.246:3306/mameie";
-            String url = "jdbc:mysql://localhost:3306";
+            String url = "jdbc:mysql://217.160.26.246:3306";
             String username = "admin";
             String password = "!Mameie93";
             Connection connection = DriverManager.getConnection(url, username, password);
@@ -57,5 +57,6 @@ public class DBController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
+     */
 
 }
