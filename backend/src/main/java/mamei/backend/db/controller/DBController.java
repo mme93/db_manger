@@ -2,6 +2,7 @@ package mamei.backend.db.controller;
 
 import mamei.backend.db.assets.DBSettingsConstants;
 import mamei.backend.db.service.DBService;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,11 @@ public class DBController {
 
     public DBController(DBService dbService) {
         this.dbService = dbService;
+    }
+
+    @GetMapping("/helloWorld")
+    public ResponseEntity<String>getHelloWorld(){
+        return new ResponseEntity<>("HellWorld",HttpStatus.OK);
     }
 
     @GetMapping("/test")
