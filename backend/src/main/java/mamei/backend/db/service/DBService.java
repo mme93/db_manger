@@ -29,10 +29,13 @@ public class DBService {
         return dbSettingsUtility.preparedStatementValueFormColumnIndex(DBQueryTableBasic.showPrivilegesForUser_1+user+DBQueryTableBasic.showPrivilegesForUser_2,1);
     }
 
-    public List<String> getAllTablesFromDatabase() throws SQLException {
+    public List<String> getAllTablesFromAllDatabases() throws SQLException {
         return dbSettingsUtility.preparedStatementValueFormColumnIndex("",1);
     }
     public List<String> createQuery(DBQuery dbQuery) throws SQLException {
         return dbSettingsUtility.preparedStatementValueFormColumnIndex(dbQuery.getDbQuery(),1);
+    }
+    public List<String> getAllTablesFromDatabase() throws SQLException {
+        return dbSettingsUtility.preparedStatementValueFormColumnIndex("",1);
     }
 }

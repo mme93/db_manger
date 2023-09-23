@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DBUser {
 
-    String userName;
-    String privileges;
+    private String userName;
+    private String privileges;
 
 }

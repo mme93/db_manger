@@ -11,5 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DBQueryResponse {
 
-    String dbResponse;
+    private String dbResponse;
 }

@@ -56,6 +56,16 @@ public class DBController {
     }
 
     @GetMapping("/database/table")
+    public ResponseEntity<List<String>> getAllTablesFromAllDatabases() {
+        try {
+            return new ResponseEntity<>(dbService.getAllTablesFromAllDatabases(), HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+    @GetMapping("/{database}/table")
     public ResponseEntity<List<String>> getAllTablesFromDatabase() {
         try {
             return new ResponseEntity<>(dbService.getAllTablesFromDatabase(), HttpStatus.OK);
@@ -74,6 +84,5 @@ public class DBController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
-
 
 }
