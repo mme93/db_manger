@@ -1,14 +1,14 @@
 package mamei.backend.db.controller;
 
-import mamei.backend.db.assets.DBSettingsConstants;
+
+import mamei.backend.db.model.DBQuery;
 import mamei.backend.db.service.DBService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/general")
@@ -25,31 +25,50 @@ public class DBController {
         return new ResponseEntity<>("HellWorld",HttpStatus.OK);
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<String> getTest() {
+    @GetMapping("/databases")
+    public ResponseEntity<List<String>> getAllDatabases() {
         try {
-            String url = "jdbc:mysql://mameie.ddns.net:3306/db_manager";
-            String username = "markus";
-            String password = "123";
-            Connection connection = DriverManager.getConnection(url, username, password);
-            PreparedStatement preparedStatement = connection.prepareStatement(DBSettingsConstants.showDatabases);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            StringBuilder stringBuilder= new StringBuilder();
-            while (resultSet.next()) {
-                String databaseName = resultSet.getString(1);
-                stringBuilder.append(databaseName+"\n");
-            }
-            return new ResponseEntity<>(stringBuilder.toString(), HttpStatus.OK);
+            return new ResponseEntity<>(dbService.getDatabaseNames(), HttpStatus.OK);
         } catch (SQLException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
 
-    @GetMapping("/databases")
-    public ResponseEntity<String> getAllDatabasesFromIP() {
+    @GetMapping("/user")
+    public ResponseEntity<List<String>> getAllUser() {
         try {
-            return new ResponseEntity<>(dbService.getDatabaseNames(), HttpStatus.OK);
+            return new ResponseEntity<>(dbService.getAllUser(), HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+    @GetMapping("/privileges/{user}")
+    public ResponseEntity<List<String>> getPrivilegesFromUser(@PathVariable String user) {
+        try {
+            return new ResponseEntity<>(dbService.getPrivilegesFromUser(user), HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+    @GetMapping("/database/table")
+    public ResponseEntity<List<String>> getAllTablesFromDatabase() {
+        try {
+            return new ResponseEntity<>(dbService.getAllTablesFromDatabase(), HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+    @PostMapping("/createQuery")
+    public ResponseEntity<List<String>> createQuery(@RequestBody DBQuery dbQuery){
+        try {
+            return new ResponseEntity<>(dbService.createQuery(dbQuery), HttpStatus.OK);
         } catch (SQLException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.CONFLICT);
