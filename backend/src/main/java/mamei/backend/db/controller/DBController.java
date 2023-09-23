@@ -2,7 +2,6 @@ package mamei.backend.db.controller;
 
 import mamei.backend.db.assets.DBSettingsConstants;
 import mamei.backend.db.service.DBService;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +14,6 @@ import java.sql.*;
 @RequestMapping("/general")
 public class DBController {
 
-    /*
     private final DBService dbService;
 
     public DBController(DBService dbService) {
@@ -31,17 +29,18 @@ public class DBController {
     public ResponseEntity<String> getTest() {
         try {
             //String url = "jdbc:mysql://217.160.26.246:3306/mameie";
-            String url = "jdbc:mysql://217.160.26.246:3306";
-            String username = "admin";
-            String password = "!Mameie93";
+            String url = "jdbc:mysql://192.168.178.44:3306/db_manager";
+            String username = "markus";
+            String password = "123";
             Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement(DBSettingsConstants.showDatabases);
             ResultSet resultSet = preparedStatement.executeQuery();
+            StringBuilder stringBuilder= new StringBuilder();
             while (resultSet.next()) {
                 String databaseName = resultSet.getString(1);
-                System.out.println(databaseName);
+                stringBuilder.append(databaseName+"\n");
             }
-            return new ResponseEntity<>(dbService.getDatabaseNames(), HttpStatus.OK);
+            return new ResponseEntity<>(stringBuilder.toString(), HttpStatus.OK);
         } catch (SQLException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -57,6 +56,6 @@ public class DBController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
-     */
+
 
 }
