@@ -28,8 +28,7 @@ public class DBController {
     @GetMapping("/test")
     public ResponseEntity<String> getTest() {
         try {
-            //String url = "jdbc:mysql://217.160.26.246:3306/mameie";
-            String url = "jdbc:mysql://192.168.178.44:3306/db_manager";
+            String url = "jdbc:mysql://mameie.ddns.net:3306/db_manager";
             String username = "markus";
             String password = "123";
             Connection connection = DriverManager.getConnection(url, username, password);
