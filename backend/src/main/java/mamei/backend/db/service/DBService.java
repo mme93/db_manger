@@ -18,24 +18,29 @@ public class DBService {
     }
 
     public List<String> getDatabaseNames() throws SQLException {
-        return dbSettingsUtility.preparedStatementValueFormColumnIndex(DBQueryTableBasic.showDatabases,1);
+        return dbSettingsUtility.preparedStatementValueFormColumnIndex(DBQueryTableBasic.showDatabases,1,dbSettingsUtility.getConnection());
     }
 
     public List<String> getAllUser() throws SQLException {
-        return dbSettingsUtility.preparedStatementValueFormColumnIndex(DBQueryTableBasic.showAllUsers,1);
+        return dbSettingsUtility.preparedStatementValueFormColumnIndex(DBQueryTableBasic.showAllUsers,1,dbSettingsUtility.getConnection());
     }
 
     public List<String> getPrivilegesFromUser(String user) throws SQLException {
-        return dbSettingsUtility.preparedStatementValueFormColumnIndex(DBQueryTableBasic.showPrivilegesForUser_1+user+DBQueryTableBasic.showPrivilegesForUser_2,1);
+        return dbSettingsUtility.preparedStatementValueFormColumnIndex(DBQueryTableBasic.showPrivilegesForUser_1+user+DBQueryTableBasic.showPrivilegesForUser_2,1,dbSettingsUtility.getConnection());
     }
 
     public List<String> getAllTablesFromAllDatabases() throws SQLException {
-        return dbSettingsUtility.preparedStatementValueFormColumnIndex("",1);
+        return dbSettingsUtility.preparedStatementValueFormColumnIndex("",1,dbSettingsUtility.getConnection());
     }
     public List<String> createQuery(DBQuery dbQuery) throws SQLException {
-        return dbSettingsUtility.preparedStatementValueFormColumnIndex(dbQuery.getDbQuery(),1);
+        return dbSettingsUtility.preparedStatementValueFormColumnIndex(dbQuery.getDbQuery(),1, dbSettingsUtility.getConnection());
     }
-    public List<String> getAllTablesFromDatabase() throws SQLException {
-        return dbSettingsUtility.preparedStatementValueFormColumnIndex("",1);
+    public List<String> createQuery(DBQuery dbQuery, String database) throws SQLException {
+        return dbSettingsUtility.preparedStatementValueFormColumnIndex(dbQuery.getDbQuery(),1, dbSettingsUtility.getConnection());
+    }
+    public List<String> getAllTablesFromDatabase(String database) throws SQLException {
+       // List<String>tableList=
+
+        return dbSettingsUtility.preparedStatementValueFormColumnIndex("",1,dbSettingsUtility.getConnection());
     }
 }

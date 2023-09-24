@@ -66,9 +66,9 @@ public class DBController {
     }
 
     @GetMapping("/{database}/table")
-    public ResponseEntity<List<String>> getAllTablesFromDatabase() {
+    public ResponseEntity<List<String>> getAllTablesFromDatabase(@PathVariable String database) {
         try {
-            return new ResponseEntity<>(dbService.getAllTablesFromDatabase(), HttpStatus.OK);
+            return new ResponseEntity<>(dbService.getAllTablesFromDatabase(database), HttpStatus.OK);
         } catch (SQLException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -79,6 +79,16 @@ public class DBController {
     public ResponseEntity<List<String>> createQuery(@RequestBody DBQuery dbQuery){
         try {
             return new ResponseEntity<>(dbService.createQuery(dbQuery), HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+    @PostMapping("/createQuery/{database}")
+    public ResponseEntity<List<String>> createQueryWithDB(@RequestBody DBQuery dbQuery, @PathVariable String database){
+        try {
+            return new ResponseEntity<>(dbService.createQuery(dbQuery,database), HttpStatus.OK);
         } catch (SQLException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.CONFLICT);
