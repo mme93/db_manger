@@ -12,51 +12,6 @@ public class DBSettingsUtility {
 
     /**
      *
-     * Erstellt eine MariaDB-Verindung her.
-     *
-     * @return Datenbank-Verindung
-     * @throws SQLException
-     */
-    public Connection getConnection() throws SQLException {
-        String url = "jdbc:mysql://mameie.ddns.net:3306/db_manager";
-        String username = "markus";
-        String password = "123";
-        return DriverManager.getConnection(url, username, password);
-    }
-
-    /**
-     *
-     * Erstellt eine Datenbank-Verindung her.
-     *
-     * @return Datenbank-Verindung
-     * @throws SQLException
-     */
-    public Connection getConnection(String database) throws SQLException {
-        String url = "jdbc:mysql://mameie.ddns.net:3306/"+database;
-        String username = "markus";
-        String password = "123";
-        return DriverManager.getConnection(url, username, password);
-    }
-
-    /**
-     *
-     * Schließt die Verindung zur Datenbank
-     *
-     * @param connection Datenbank-Verindung
-     * @return Stauts ob die Verbindung geschlossen wurde
-     */
-    public boolean closeConnection(Connection connection) {
-        try {
-            connection.close();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     *
      * Führt ein {@link DBQuery} für die Datenbank aus und gibt die {@link DBQueryResponse}
      *
      * @param query QueryStatement
@@ -102,4 +57,48 @@ public class DBSettingsUtility {
         return resultList;
     }
 
+    /**
+     *
+     * Erstellt eine MariaDB-Verindung her.
+     *
+     * @return Datenbank-Verindung
+     * @throws SQLException
+     */
+    public Connection getConnection() throws SQLException {
+        String url = "jdbc:mysql://mameie.ddns.net:3306/db_manager";
+        String username = "markus";
+        String password = "123";
+        return DriverManager.getConnection(url, username, password);
+    }
+
+    /**
+     *
+     * Erstellt eine Datenbank-Verindung her.
+     *
+     * @return Datenbank-Verindung
+     * @throws SQLException
+     */
+    public Connection getConnection(String database) throws SQLException {
+        String url = "jdbc:mysql://mameie.ddns.net:3306/"+database;
+        String username = "markus";
+        String password = "123";
+        return DriverManager.getConnection(url, username, password);
+    }
+
+    /**
+     *
+     * Schließt die Verindung zur Datenbank
+     *
+     * @param connection Datenbank-Verindung
+     * @return Stauts ob die Verbindung geschlossen wurde
+     */
+    public boolean closeConnection(Connection connection) {
+        try {
+            connection.close();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

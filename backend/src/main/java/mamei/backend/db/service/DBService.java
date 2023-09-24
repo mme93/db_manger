@@ -26,7 +26,7 @@ public class DBService {
     }
 
     public List<String> getPrivilegesFromUser(String user) throws SQLException {
-        return dbSettingsUtility.preparedStatementValueFormColumnIndex(DBQueryTableBasic.showPrivilegesForUser_1+user+DBQueryTableBasic.showPrivilegesForUser_2,1,dbSettingsUtility.getConnection());
+        return dbSettingsUtility.preparedStatementValueFormColumnIndex(DBQueryTableBasic.showPrivilegesForUser_Local_1 +user+DBQueryTableBasic.showPrivilegesForUser_Local_2,1,dbSettingsUtility.getConnection());
     }
 
     public List<String> getAllTablesFromAllDatabases() throws SQLException {
