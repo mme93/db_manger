@@ -31,9 +31,6 @@ public class TableService {
     public void dropTable(String database, String table){
 
     }
-    public void updateTable(){
-
-    }
     public void getTableInformation(String database, String table){
 
     }

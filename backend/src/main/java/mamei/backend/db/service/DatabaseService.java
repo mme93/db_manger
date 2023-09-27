@@ -25,4 +25,10 @@ public class DatabaseService {
     public List<String> getDatabaseNames() throws SQLException {
         return dbSettingsUtility.preparedStatementValueFormColumnIndex(DBQueryTableBasic.showDatabases,1,dbSettingsUtility.getConnection());
     }
+
+    public void deleteDatabase(String database) {
+    }
+
+    public void createDatabase(String database) {
+    }
 }

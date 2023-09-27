@@ -3,10 +3,7 @@ package mamei.backend.db.controller;
 import mamei.backend.db.service.TableService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -36,4 +33,33 @@ public class TableController {
         }
     }
 
+    @PostMapping("/create")
+    public void createTable(){
+        tableService.createTable(null,null);
+    }
+
+    @DeleteMapping("/delete")
+    public void deleteTable(){
+        tableService.dropTable(null,null);
+    }
+
+    @PostMapping("/create")
+    public void addDataToTable(){
+        tableService.addDataToTable();
+    }
+
+    @DeleteMapping("/deleteData")
+    public void removeDataFromTable(){
+        tableService.removeDataFromTable();
+    }
+
+    @GetMapping("/information")
+    public void getTableInformation() {
+        tableService.getTableInformation(null,null);
+    }
+
+    @GetMapping("/information/{database}")
+    public void getTableFromDatabase(@PathVariable String database) {
+        tableService.getTableFromDatabase(database,null);
+    }
 }

@@ -28,4 +28,15 @@ public class UserService {
         return dbSettingsUtility.preparedStatementValueFormColumnIndex(DBQueryTableBasic.showPrivilegesForUser_Local_1 +user+DBQueryTableBasic.showPrivilegesForUser_Local_2,1,dbSettingsUtility.getConnection());
     }
 
+    public void updatePrivileges() {
+    }
+
+    public void createUser() {
+    }
+
+    public void deleteUser() {
+    }
+
+    public void changePassword() {
+    }
 }

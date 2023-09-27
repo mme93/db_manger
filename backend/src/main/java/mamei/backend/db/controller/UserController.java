@@ -43,18 +43,22 @@ public class UserController {
 
     @PutMapping("/privileges/update")
     public void updatePrivileges(){
-
+        userService.updatePrivileges();
     }
 
     @PutMapping("/create")
     public void createUser(){
-
+        userService.createUser();
     }
 
     @PutMapping("/delete")
     public void deleteUser(){
-
+        userService.deleteUser();
     }
 
+    @PutMapping("/password")
+    public void changePassword(){
+        userService.changePassword();
+    }
 
 }
