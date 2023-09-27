@@ -1,8 +1,8 @@
-package mamei.backend.db.utility;
+package mamei.backend.db.mariadb.utility;
 
-import mamei.backend.db.model.table.TIndexObject;
+import mamei.backend.db.mariadb.model.table.TIndexObject;
 import org.springframework.stereotype.Service;
-import mamei.backend.db.model.*;
+import mamei.backend.db.mariadb.model.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package mamei.backend.db.model.table;
+package mamei.backend.db.mariadb.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,10 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TIndexObject {
+public class DBUser {
 
-    private Class<?> tClass;
-    private int columnIndex;
-    private String columnName;
+    private String userName;
+    private String privileges;
 
 }

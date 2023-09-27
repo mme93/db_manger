@@ -1,4 +1,4 @@
-package mamei.backend.db.assets;
+package mamei.backend.db.mariadb.assets;
 
 public class DBQueryTableBasic {
     public static final String showDatabases = "SHOW DATABASES";

@@ -1,6 +1,6 @@
-package mamei.backend.db.controller;
+package mamei.backend.db.mariadb.controller;
 
-import mamei.backend.db.service.TableService;
+import mamei.backend.db.mariadb.service.TableService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +43,7 @@ public class TableController {
         tableService.dropTable(null,null);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/createData")
     public void addDataToTable(){
         tableService.addDataToTable();
     }

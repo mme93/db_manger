@@ -1,4 +1,4 @@
-package mamei.backend.db.model;
+package mamei.backend.db.mariadb.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DBUser {
+public class DBQuery {
 
-    private String userName;
-    private String privileges;
+    private String dbQuery;
 
 }

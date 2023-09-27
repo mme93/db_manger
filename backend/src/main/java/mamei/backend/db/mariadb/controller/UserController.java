@@ -1,6 +1,6 @@
-package mamei.backend.db.controller;
+package mamei.backend.db.mariadb.controller;
 
-import mamei.backend.db.service.UserService;
+import mamei.backend.db.mariadb.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

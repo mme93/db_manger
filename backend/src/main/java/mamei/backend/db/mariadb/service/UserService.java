@@ -1,7 +1,7 @@
-package mamei.backend.db.service;
+package mamei.backend.db.mariadb.service;
 
-import mamei.backend.db.assets.DBQueryTableBasic;
-import mamei.backend.db.utility.DBSettingsUtility;
+import mamei.backend.db.mariadb.assets.DBQueryTableBasic;
+import mamei.backend.db.mariadb.utility.DBSettingsUtility;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
