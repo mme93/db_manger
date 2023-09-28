@@ -3,3 +3,8 @@ server:
 
 jwt:
   secret: secretkey123
+
+maria_db_1:
+  ip: mameie.ddns.net:3306/
+  user: markus
+  password: 123

@@ -8,4 +8,5 @@ public class DBQueryTableBasic {
     public static final String showPrivilegesForUser_Global_1 = "SHOW GRANTS FOR '";
     public static final String showPrivilegesForUser_Global_2 = "'@'%'";
     public static final String describe = "DESCRIBE ";
+    public static final String createDatabase= "CREATE DATABASE";
 }

@@ -17,7 +17,7 @@ public class DatabaseService {
     }
 
     public List<String> getAllTablesFromDatabase(String database) throws SQLException {
-        // List<String>tableList=
+
 
         return dbSettingsUtility.preparedStatementValueFormColumnIndex("",1,dbSettingsUtility.getConnection());
     }

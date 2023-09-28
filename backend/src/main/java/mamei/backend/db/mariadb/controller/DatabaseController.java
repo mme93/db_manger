@@ -8,16 +8,27 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ *  Information about Databases and his Tables
+ */
 @RestController
 @RequestMapping("/database")
 public class DatabaseController {
 
     private final DatabaseService databaseService;
 
+    /**
+     * @param databaseService Service for prepareStatements for Databases
+     */
     public DatabaseController(DatabaseService databaseService) {
         this.databaseService = databaseService;
     }
 
+    /**
+     *
+     * @param database Database Name
+     * @return
+     */
     @GetMapping("/{database}/tables")
     public ResponseEntity<List<String>> getAllTablesFromDatabase(@PathVariable String database) {
         try {
