@@ -4,7 +4,17 @@ server:
 jwt:
   secret: secretkey123
 
+pi_maria_db:
+  ip: jdbc:mysql://mameie.ddns.net:3306/
+  user: remote_user
+  password: !xyz123456
+
+cloud_server_maria_db:
+  ip: jdbc:mysql://212.227.165.166:3306/
+  user: remote_user
+  password: !xyz123456
+
 maria_db_1:
-  ip: mameie.ddns.net:3306/
-  user: markus
-  password: 123
+  ip: jdbc:mysql://217.160.26.246:3306/
+  user: remote_user
+  password: !xyz123456
