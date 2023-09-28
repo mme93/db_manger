@@ -14,7 +14,7 @@ cloud_server_maria_db:
   user: remote_user
   password: !xyz123456
 
-maria_db_1:
+cloud_xxl_maria_db:
   ip: jdbc:mysql://217.160.26.246:3306/
   user: remote_user
   password: !xyz123456
