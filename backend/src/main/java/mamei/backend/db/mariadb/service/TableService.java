@@ -1,6 +1,7 @@
 package mamei.backend.db.mariadb.service;
 
 import mamei.backend.db.mariadb.assets.DBSettingsConstants;
+import mamei.backend.db.mariadb.model.table.TableObject;
 import mamei.backend.db.mariadb.utility.DBConnection;
 import mamei.backend.db.mariadb.utility.DBSettingsUtility;
 import org.springframework.stereotype.Service;
@@ -72,10 +73,14 @@ public class TableService {
         connection.close();
     }
 
-    public List<String> getColumnNameFromTable() throws SQLException {
-        List<String>columnNameList= new ArrayList<>();
-        this.connection.createConnection(DBSettingsConstants.CLOUD_XXL);
-        return columnNameList;
+    /*
+    TODO: Die richige Connection auswählen, nicht das die falsche auf Grund des Server genommen wird
+     */
+    public TableObject getTableContext(String tableName, String databaseName, String serverName) throws SQLException {
+        TableObject tableObject= new TableObject(tableName,databaseName,serverName);
+        tableObject.initTable(connection.createConnection(serverName));
+        tableObject.loadTableContext(connection.createConnection(serverName));
+        return tableObject;
     }
 
 }
