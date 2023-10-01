@@ -21,10 +21,10 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<String>> getAllUser() {
+    @GetMapping("/all/{serverName}")
+    public ResponseEntity<String> getAllUser(@PathVariable String serverName) {
         try {
-            return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
+            return new ResponseEntity<>(userService.getUsers(serverName), HttpStatus.OK);
         } catch (SQLException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.CONFLICT);

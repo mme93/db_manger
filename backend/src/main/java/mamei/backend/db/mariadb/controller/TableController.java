@@ -62,4 +62,9 @@ public class TableController {
     public void getTableFromDatabase(@PathVariable String database) {
         tableService.getTableFromDatabase(database,null);
     }
+
+    @GetMapping("/test")
+    public void test() throws SQLException {
+        tableService.getColumnNameFromTable();
+    }
 }

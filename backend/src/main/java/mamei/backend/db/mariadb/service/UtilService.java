@@ -1,6 +1,7 @@
 package mamei.backend.db.mariadb.service;
 
 import mamei.backend.db.mariadb.model.DBQuery;
+import mamei.backend.db.mariadb.utility.DBConnection;
 import mamei.backend.db.mariadb.utility.DBSettingsUtility;
 import org.springframework.stereotype.Service;
 
@@ -11,18 +12,17 @@ import java.util.List;
 public class UtilService {
 
     private final DBSettingsUtility dbSettingsUtility;
+    private final DBConnection connection;
 
-    public UtilService(DBSettingsUtility dbSettingsUtility) {
+    public UtilService(DBSettingsUtility dbSettingsUtility, DBConnection connection) {
         this.dbSettingsUtility = dbSettingsUtility;
+        this.connection = connection;
     }
 
-
-
-
-    public List<String> createQuery(DBQuery dbQuery) throws SQLException {
-        return dbSettingsUtility.preparedStatementValueFormColumnIndex(dbQuery.getDbQuery(),1, dbSettingsUtility.getConnection());
+    public String createQuery(DBQuery dbQuery) throws SQLException {
+        return dbSettingsUtility.preparedStatement(dbQuery.getDbQuery(),connection.createConnection(dbQuery.getServerName()));
     }
-    public List<String> createQuery(DBQuery dbQuery, String database) throws SQLException {
-        return dbSettingsUtility.preparedStatementValueFormColumnIndex(dbQuery.getDbQuery(),1, dbSettingsUtility.getConnection());
+    public String createQuery(DBQuery dbQuery, String databaseName) throws SQLException {
+        return dbSettingsUtility.preparedStatement(dbQuery.getDbQuery(),connection.createConnection(dbQuery.getServerName()));
     }
 }

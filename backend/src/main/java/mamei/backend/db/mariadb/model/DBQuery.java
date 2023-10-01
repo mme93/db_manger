@@ -11,6 +11,14 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DBQuery {
 
+    private String serverName;
+
+    private String databaseName;
+
     private String dbQuery;
 
+    public DBQuery(String serverName, String dbQuery) {
+        this.serverName = serverName;
+        this.dbQuery = dbQuery;
+    }
 }

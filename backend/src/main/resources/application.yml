@@ -7,14 +7,14 @@ jwt:
 pi_maria_db:
   ip: jdbc:mysql://mameie.ddns.net:3306/
   user: remote_user
-  password: !xyz123456
+  password: "!xyz123456"
 
 cloud_server_maria_db:
   ip: jdbc:mysql://212.227.165.166:3306/
   user: remote_user
-  password: !xyz123456
+  password: "!xyz123456"
 
 cloud_xxl_maria_db:
   ip: jdbc:mysql://217.160.26.246:3306/
   user: remote_user
-  password: !xyz123456
+  password: "!xyz123456"

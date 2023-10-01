@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.*;
-import java.util.List;
 
 @RestController
 @RequestMapping("/utils")
@@ -29,7 +28,7 @@ public class UtilsController {
     }
 
     @PostMapping("/createQuery")
-    public ResponseEntity<List<String>> createQuery(@RequestBody DBQuery dbQuery) {
+    public ResponseEntity<String> createQuery(@RequestBody DBQuery dbQuery) {
         try {
             return new ResponseEntity<>(utilService.createQuery(dbQuery), HttpStatus.OK);
         } catch (SQLException e) {
@@ -39,7 +38,7 @@ public class UtilsController {
     }
 
     @PostMapping("/createQuery/{database}")
-    public ResponseEntity<List<String>> createQueryWithDB(@RequestBody DBQuery dbQuery, @PathVariable String database) {
+    public ResponseEntity<String> createQueryWithDB(@RequestBody DBQuery dbQuery, @PathVariable String database) {
         try {
             return new ResponseEntity<>(utilService.createQuery(dbQuery, database), HttpStatus.OK);
         } catch (SQLException e) {

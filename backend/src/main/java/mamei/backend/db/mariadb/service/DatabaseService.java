@@ -17,13 +17,11 @@ public class DatabaseService {
     }
 
     public List<String> getAllTablesFromDatabase(String database) throws SQLException {
-
-
-        return dbSettingsUtility.preparedStatementValueFormColumnIndex("",1,dbSettingsUtility.getConnection());
+        return null;
     }
 
     public List<String> getDatabaseNames() throws SQLException {
-        return dbSettingsUtility.preparedStatementValueFormColumnIndex(DBQueryTableBasic.showDatabases,1,dbSettingsUtility.getConnection());
+        return null;
     }
 
     public void deleteDatabase(String database) {

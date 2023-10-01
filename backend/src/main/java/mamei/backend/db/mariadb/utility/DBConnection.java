@@ -1,9 +1,5 @@
 package mamei.backend.db.mariadb.utility;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import mamei.backend.db.mariadb.assets.DBSettingsConstants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -15,9 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
 @Component
 public class DBConnection {
 
@@ -48,16 +41,20 @@ public class DBConnection {
     @Value("${cloud_xxl_maria_db.password}")
     private String cloud_xxl_maria_db_password;
 
-    private String database;
-    private boolean isDatabaseConnection;
+    private String database = "";
+    private boolean isDatabaseConnection = false;
 
     public Connection createConnection(String serverName) throws SQLException {
         List<String> configList = getConfiguration(serverName);
-        if (isDatabaseConnection) {
+        if(configList.isEmpty()){
+            throw new SQLException("No Configuration found for Servername: "+serverName);
+        }
+        if (isDatabaseConnection && database.length() > 0) {
             return DriverManager.getConnection(configList.get(0) + database, configList.get(1), configList.get(2));
-        } else {
+        } else{
             return DriverManager.getConnection(configList.get(0), configList.get(1), configList.get(2));
         }
+        //throw new SQLException("Error no Database with Name "+serverName+" found!");
     }
 
     public List<String> getConfiguration(String serverName) {
@@ -83,4 +80,19 @@ public class DBConnection {
         return new ArrayList<>();
     }
 
+    public String getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(String database) {
+        this.database = database;
+    }
+
+    public boolean isDatabaseConnection() {
+        return isDatabaseConnection;
+    }
+
+    public void setDatabaseConnection(boolean databaseConnection) {
+        isDatabaseConnection = databaseConnection;
+    }
 }

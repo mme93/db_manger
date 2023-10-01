@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "company")
+@Table(name = "db_manager")
 public class DBUserEntity {
 
     @Id
