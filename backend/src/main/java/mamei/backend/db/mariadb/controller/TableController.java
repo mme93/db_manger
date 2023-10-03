@@ -1,6 +1,7 @@
 package mamei.backend.db.mariadb.controller;
 
 import mamei.backend.db.mariadb.model.table.TableObject;
+import mamei.backend.db.mariadb.model.table.VTableObject;
 import mamei.backend.db.mariadb.service.TableService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -65,12 +66,20 @@ public class TableController {
     }
 
     @GetMapping("/test/{tableName}/{databaseName}/{serverName}")
-    public ResponseEntity<TableObject> test(@PathVariable String tableName, @PathVariable String databaseName, @PathVariable String serverName) {
+    public ResponseEntity<VTableObject> test(@PathVariable String tableName, @PathVariable String databaseName, @PathVariable String serverName) {
         try {
-            return new ResponseEntity<>(tableService.getTableContext(tableName,databaseName,serverName),HttpStatus.OK);
+            if(tableService.checkTableExist(databaseName,tableName,serverName)){
+                try {
+                    return new ResponseEntity<>(tableService.getTableContext(tableName,databaseName,serverName),HttpStatus.OK);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return new ResponseEntity<>(HttpStatus.CONFLICT);
+                }
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (SQLException e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }
