@@ -63,7 +63,7 @@ public class TableService {
                 tableObject.getTableName(),
                 tableObject.getDatabaseName(),
                 tableObject.getServerName(),
-                tableObject.getColumnList()
+                tableObject.getColumnMetaObjectList()
         );
     }
 

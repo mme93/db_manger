@@ -17,6 +17,6 @@ public class VTableObject {
 
     private String serverName;
 
-    private List<ColumnObject> columnList;
+    private List<ColumnMetaObject> columnList;
 
 }
