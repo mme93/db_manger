@@ -41,20 +41,20 @@ public class DBConnection {
     @Value("${cloud_xxl_maria_db.password}")
     private String cloud_xxl_maria_db_password;
 
-    private String database = "";
-    private boolean isDatabaseConnection = false;
 
     public Connection createConnection(String serverName) throws SQLException {
         List<String> configList = getConfiguration(serverName);
         if(configList.isEmpty()){
             throw new SQLException("No Configuration found for Servername: "+serverName);
         }
-        if (isDatabaseConnection && database.length() > 0) {
-            return DriverManager.getConnection(configList.get(0) + database, configList.get(1), configList.get(2));
-        } else{
-            return DriverManager.getConnection(configList.get(0), configList.get(1), configList.get(2));
+        return DriverManager.getConnection(configList.get(0), configList.get(1), configList.get(2));
+    }
+    public Connection createDatabaseConnection(String serverName, String databaseName) throws SQLException {
+        List<String> configList = getConfiguration(serverName);
+        if(configList.isEmpty()){
+            throw new SQLException("No Configuration found for Servername: "+serverName);
         }
-        //throw new SQLException("Error no Database with Name "+serverName+" found!");
+        return DriverManager.getConnection(configList.get(0) + databaseName, configList.get(1), configList.get(2));
     }
 
     public List<String> getConfiguration(String serverName) {
@@ -80,19 +80,4 @@ public class DBConnection {
         return new ArrayList<>();
     }
 
-    public String getDatabase() {
-        return database;
-    }
-
-    public void setDatabase(String database) {
-        this.database = database;
-    }
-
-    public boolean isDatabaseConnection() {
-        return isDatabaseConnection;
-    }
-
-    public void setDatabaseConnection(boolean databaseConnection) {
-        isDatabaseConnection = databaseConnection;
-    }
 }

@@ -52,18 +52,16 @@ public class TableService {
 
     }
 
-    /*
-    TODO: Die richige Connection auswählen, nicht das die falsche auf Grund des Server genommen wird
-     */
+
     public VTableObject getTableContext(String tableName, String databaseName, String serverName) throws SQLException {
         TableObject tableObject= new TableObject(tableName,databaseName,serverName);
         tableObject.initTable(connection.createConnection(serverName));
-        tableObject.loadTableContext(connection.createConnection(serverName));
         return new VTableObject(
                 tableObject.getTableName(),
                 tableObject.getDatabaseName(),
                 tableObject.getServerName(),
-                tableObject.getColumnMetaObjectList()
+                tableObject.getColumnMetaObjectList(),
+                tableObject.loadTableContext(connection.createDatabaseConnection(serverName,databaseName))
         );
     }
 

@@ -2,6 +2,7 @@ package mamei.backend.db.mariadb.model.table;
 
 import lombok.Getter;
 import lombok.Setter;
+import mamei.backend.db.mariadb.model.ENUM.MySQLDataType;
 import mamei.backend.db.mariadb.utility.SQLEnumConverter;
 
 import java.sql.Connection;
@@ -10,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 @Getter
 @Setter
@@ -21,7 +23,7 @@ public class TableObject {
 
     private String serverName;
 
-    private List<ColumnObject> columnList;
+    private List<List<ColumnDataObject>> columnRowList;
 
     private List<ColumnMetaObject> columnMetaObjectList;
 
@@ -33,53 +35,78 @@ public class TableObject {
 
     public void initTable(Connection connection) throws SQLException {
         columnMetaObjectList = getColumnNameList(connection, createColumnNamesQuery());
-        columnList = loadColumnProperties(connection, createColumnPropertiesQuery());
+        columnMetaObjectList = loadColumnProperties(connection, createColumnPropertiesQuery());
         connection.close();
     }
 
-    public void loadTableContext(Connection connection) throws SQLException {
-
-        connection.close();
-    }
-
-    private List<ColumnObject> loadColumnProperties(Connection connection, String query) {
+    public List<ColumnRowObject>  loadTableContext(Connection connection) throws SQLException {
+        List<ColumnRowObject> columnRows = new ArrayList<>();
+        String query = createTableDataQuery();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
-            int index=0;
+            int index = 0;
+            while (resultSet.next()) {
+                List<ColumnDataObject> columnRow = new ArrayList<>();
+                for (ColumnMetaObject columnMetaObject : columnMetaObjectList) {
+                    if(columnMetaObject.getMySQLDataTypeEnum().equals(MySQLDataType.INT)){
+                        columnRow.add(new ColumnDataObject(
+                                columnMetaObject.getColumnName(),
+                                resultSet.getInt(columnMetaObject.getColumnName())
+                        ));
+                    }else if(columnMetaObject.getMySQLDataTypeEnum().equals(MySQLDataType.VARCHAR)){
+                        columnRow.add(new ColumnDataObject(
+                                columnMetaObject.getColumnName(),
+                                resultSet.getString(columnMetaObject.getColumnName())
+                        ));
+                    }
+                }
+                columnRows.add(new ColumnRowObject(columnRow,index));
+                index++;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        connection.close();
+        return columnRows;
+    }
+
+    private List<ColumnMetaObject> loadColumnProperties(Connection connection, String query) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            int index = 0;
             while (resultSet.next()) {
                 for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-                    if(index==0 && i==6){
-                        System.out.println(resultSet.getString(i));
-                    }
-
                     if (resultSet.getString(i) == null || resultSet.getString(i).isEmpty()) {
-                        if(i==1){
+                        if (i == 1) {
                             columnMetaObjectList.get(index).setColumnName("EMPTY");
-                        }else if(i==2){
+                        } else if (i == 2) {
                             columnMetaObjectList.get(index).setCOLUMN_TYPE("EMPTY");
                             columnMetaObjectList.get(index).setMySQLDataTypeEnum(null);
-                        }else if(i==3){
+                        } else if (i == 3) {
                             columnMetaObjectList.get(index).setIS_NULLABLE(false);
-                        }else if(i==4){
+                        } else if (i == 4) {
                             columnMetaObjectList.get(index).setCOLUMN_KEY("EMPTY");
-                        }else if(i==5){
+                        } else if (i == 5) {
                             columnMetaObjectList.get(index).setCOLUMN_DEFAULT("EMPTY");
-                        }else if(i==6){
+                        } else if (i == 6) {
                             columnMetaObjectList.get(index).setEXTRA("EMPTY");
                         }
                     } else {
-                        if(i==1){
+                        if (i == 1) {
                             columnMetaObjectList.get(index).setColumnName(resultSet.getString(i));
-                        }else if(i==2){
+                        } else if (i == 2) {
                             columnMetaObjectList.get(index).setCOLUMN_TYPE(resultSet.getString(i));
-                            columnMetaObjectList.get(index).setMySQLDataTypeEnum(SQLEnumConverter.getEnumFROMSQLTypString(resultSet.getString(i)));
-                        }else if(i==3){
+                            columnMetaObjectList.get(index).setMySQLDataTypeEnum(
+                                    SQLEnumConverter.getEnumFROMSQLTypString(resultSet.getString(i))
+                            );
+                        } else if (i == 3) {
                             columnMetaObjectList.get(index).setIS_NULLABLE(resultSet.getString(i).equals("NO"));
-                        }else if(i==4){
+                        } else if (i == 4) {
                             columnMetaObjectList.get(index).setCOLUMN_KEY(resultSet.getString(i));
-                        }else if(i==5){
+                        } else if (i == 5) {
                             columnMetaObjectList.get(index).setCOLUMN_DEFAULT(resultSet.getString(i));
-                        }else if(i==6){
+                        } else if (i == 6) {
                             columnMetaObjectList.get(index).setEXTRA(resultSet.getString(i));
                         }
                     }
@@ -90,7 +117,7 @@ public class TableObject {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return columnList;
+        return columnMetaObjectList;
     }
 
 
@@ -105,6 +132,16 @@ public class TableObject {
             e.printStackTrace();
         }
         return columnMetaObjectList;
+    }
+
+    private String createTableDataQuery() {
+        String delimiter = ",";
+        StringJoiner joiner = new StringJoiner(delimiter);
+        for (ColumnMetaObject columnMetaObject : columnMetaObjectList) {
+            joiner.add(columnMetaObject.getColumnName());
+        }
+
+        return "SELECT " + joiner + " FROM " + tableName;
     }
 
     private String createColumnNamesQuery() {

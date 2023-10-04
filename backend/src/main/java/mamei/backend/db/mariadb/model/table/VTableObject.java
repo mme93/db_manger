@@ -19,4 +19,6 @@ public class VTableObject {
 
     private List<ColumnMetaObject> columnList;
 
+    private List<ColumnRowObject> columnRowList;
+
 }
