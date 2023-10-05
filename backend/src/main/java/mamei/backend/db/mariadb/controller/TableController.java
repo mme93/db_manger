@@ -1,5 +1,6 @@
 package mamei.backend.db.mariadb.controller;
 
+import mamei.backend.db.mariadb.model.table.CTableObject;
 import mamei.backend.db.mariadb.model.table.TableObject;
 import mamei.backend.db.mariadb.model.table.VTableObject;
 import mamei.backend.db.mariadb.service.TableService;
@@ -36,8 +37,13 @@ public class TableController {
     }
 
     @PostMapping("/create")
-    public void createTable(){
-        tableService.createTable(null,null);
+    public ResponseEntity<String> createTable(@RequestBody CTableObject tableObject){
+        try {
+            return new ResponseEntity(tableService.createTable(tableObject),HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.CONFLICT);
+        }
     }
 
     @DeleteMapping("/delete")
@@ -61,8 +67,8 @@ public class TableController {
     }
 
     @GetMapping("/information/{database}")
-    public void getTableFromDatabase(@PathVariable String database) {
-        tableService.getTableFromDatabase(database,null);
+    public ResponseEntity<List<String>> getTableFromDatabase(@PathVariable String database) {
+        return new ResponseEntity<>(tableService.getTableFromDatabase(database), HttpStatus.OK);
     }
 
     @GetMapping("/test/{tableName}/{databaseName}/{serverName}")
