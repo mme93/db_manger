@@ -61,16 +61,29 @@ public class TableController {
         tableService.removeDataFromTable();
     }
 
-    @GetMapping("/information")
-    public void getTableInformation() {
-        tableService.getTableInformation(null,null);
+    @PostMapping("/information")
+    public ResponseEntity<VTableObject> getTableInformation(@RequestBody CTableObject tableObject) {
+        try {
+            if(tableService.checkTableExist(tableObject)){
+                try {
+                    return new ResponseEntity<>(tableService.getTableContext(tableObject),HttpStatus.OK);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return new ResponseEntity<>(HttpStatus.CONFLICT);
+                }
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/information/{database}")
     public ResponseEntity<List<String>> getTableFromDatabase(@PathVariable String database) {
         return new ResponseEntity<>(tableService.getTableFromDatabase(database), HttpStatus.OK);
     }
-
+    /*
     @GetMapping("/test/{tableName}/{databaseName}/{serverName}")
     public ResponseEntity<VTableObject> test(@PathVariable String tableName, @PathVariable String databaseName, @PathVariable String serverName) {
         try {
@@ -88,4 +101,5 @@ public class TableController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+     */
 }

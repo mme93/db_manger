@@ -23,4 +23,13 @@ public class ColumnMetaObject {
     public ColumnMetaObject(String columnName) {
         this.columnName = columnName;
     }
+
+    public ColumnMetaObject(String columnName, String COLUMN_TYPE, boolean IS_NULLABLE, String COLUMN_KEY, String COLUMN_DEFAULT, String EXTRA) {
+        this.columnName = columnName;
+        this.COLUMN_TYPE = COLUMN_TYPE;
+        this.IS_NULLABLE = IS_NULLABLE;
+        this.COLUMN_KEY = COLUMN_KEY;
+        this.COLUMN_DEFAULT = COLUMN_DEFAULT;
+        this.EXTRA = EXTRA;
+    }
 }
