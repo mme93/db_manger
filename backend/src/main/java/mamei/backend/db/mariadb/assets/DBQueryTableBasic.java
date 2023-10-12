@@ -10,4 +10,5 @@ public class DBQueryTableBasic {
     public static final String describe = "DESCRIBE ";
     public static final String createDatabase= "CREATE DATABASE";
     public static final String showTables="SHOW TABLES";
+    public static final String dropTable="DROP TABLE ";
 }

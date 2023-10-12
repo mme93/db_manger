@@ -8,6 +8,14 @@ import java.util.List;
 public class DBSettingsUtility {
 
 
+    /***
+     * TODO: Für alle drei Arten bitte Methoden anlegen und auskommentieren.
+     *
+     * executeQuery()
+     * executeUpdate()
+     * execute()
+     */
+
     public String preparedStatementWithOneParameter(String query, Connection connection, int index){
         StringBuilder stringBuilder = new StringBuilder();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -34,6 +42,11 @@ public class DBSettingsUtility {
             e.printStackTrace();
         }
         return stringBuilder.toString();
+    }
+    public void onlyExcuteQuery(String query, Connection connection) throws SQLException{
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+       // preparedStatement.executeQuery();
+        preparedStatement.execute();
     }
 
     public String preparedStatement(String query, Connection connection, List<Integer> columnIndexList)  {

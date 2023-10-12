@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Controller for Table Information and functionality.
+ */
 @RestController
 @RequestMapping("/table")
 public class TableController {
@@ -21,39 +24,47 @@ public class TableController {
         this.tableService = tableService;
     }
 
-    @GetMapping("/{database}/{serverName}/tables")
-    public ResponseEntity<List<String>> getAllTablesFromDatabase(@PathVariable String database, @PathVariable String serverName) {
-        try {
-            return new ResponseEntity<>(tableService.getAllTablesFromDatabase(database, serverName), HttpStatus.OK);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
-    }
-
-    @GetMapping("/database/table")
-    public ResponseEntity<List<String>> getAllTablesFromAllDatabases() {
-        try {
-            return new ResponseEntity<>(tableService.getAllTablesFromAllDatabases(), HttpStatus.OK);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
-    }
-
+    /**
+     * TODO: Vorher prüfen ob ich Tabelle vorhanden ist
+     *
+     * Create a new Table.
+     *
+     * @param tableObject
+     * @return
+     */
     @PostMapping("/create")
-    public ResponseEntity<String> createTable(@RequestBody CTableObject tableObject) {
+    public ResponseEntity createTable(@RequestBody CTableObject tableObject) {
         try {
-            return new ResponseEntity(tableService.createTable(tableObject), HttpStatus.OK);
+            if (!tableService.checkTableExist(tableObject)) {
+                tableService.createTable(tableObject);
+                return new ResponseEntity(HttpStatus.CREATED);
+            }
+            return new ResponseEntity(HttpStatus.CONFLICT);
         } catch (SQLException e) {
             e.printStackTrace();
             return new ResponseEntity(HttpStatus.CONFLICT);
         }
     }
 
-    @DeleteMapping("/delete")
-    public void deleteTable() {
-        tableService.dropTable(null, null);
+    /**
+     * Delete Table from Database.
+     *
+     * @param database
+     * @param tableName
+     * @param serverName
+     */
+    @DeleteMapping("/delete/{database}/{tableName}/{serverName}")
+    public void deleteTable(@PathVariable String database, @PathVariable String tableName, @PathVariable String serverName) {
+        try {
+            tableService.dropTable(database, tableName,serverName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @PostMapping("/update")
+    public void updateTable() {
+        tableService.addDataToTable();
     }
 
     @PostMapping("/createData")
@@ -66,6 +77,12 @@ public class TableController {
         tableService.removeDataFromTable();
     }
 
+    /**
+     * Create Table with Context from specific Database.
+     *
+     * @param tableObject
+     * @return VTableObject
+     */
     @PostMapping("/information")
     public ResponseEntity<VTableObject> getTableInformation(@RequestBody CTableObject tableObject) {
         try {
@@ -84,9 +101,20 @@ public class TableController {
         }
     }
 
-    @GetMapping("/information/{database}")
-    public ResponseEntity<List<String>> getTableFromDatabase(@PathVariable String database) {
-        return new ResponseEntity<>(tableService.getTableFromDatabase(database), HttpStatus.OK);
+    /**
+     * Create all Tables with Context, which contains in the Database.
+     *
+     * @param database
+     * @param serverName
+     * @return
+     */
+    @GetMapping("/{database}/{serverName}/tables")
+    public ResponseEntity<List<VTableObject>> getAllTablesFromDatabase(@PathVariable String database, @PathVariable String serverName) {
+        try {
+            return new ResponseEntity<>(tableService.getAllTablesFromDatabase(database, serverName), HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
-
 }
