@@ -55,8 +55,9 @@ public class TableService {
 
     }
 
-    public void removeDataFromTable() {
-
+    public void removeDataFromTable(String database, String id, String serverName, String tableName) throws SQLException {
+        String query="DELETE FROM "+tableName+" WHERE id ="+id;
+        dbSettingsUtility.onlyExcuteQuery(query,connection.createDatabaseConnection(serverName,database));
     }
 
 

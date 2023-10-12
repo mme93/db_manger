@@ -72,9 +72,24 @@ public class TableController {
         tableService.addDataToTable();
     }
 
-    @DeleteMapping("/deleteData")
-    public void removeDataFromTable() {
-        tableService.removeDataFromTable();
+    /**
+     * TODO: Muss noch click-test gemacht werden
+     *
+     * @param database
+     * @param id
+     * @param serverName
+     * @param tableName
+     * @return
+     */
+    @DeleteMapping("/deleteData/{database}/{tableName}/{serverName}/{id}")
+    public ResponseEntity removeDataFromTable(@PathVariable String database, @PathVariable String id, @PathVariable String serverName, @PathVariable String tableName) {
+        try {
+            tableService.removeDataFromTable(database,id,serverName,tableName);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.CONFLICT);
+        }
     }
 
     /**
