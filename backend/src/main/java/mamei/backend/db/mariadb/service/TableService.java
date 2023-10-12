@@ -1,5 +1,6 @@
 package mamei.backend.db.mariadb.service;
 
+import mamei.backend.db.mariadb.assets.DBQueryTableBasic;
 import mamei.backend.db.mariadb.model.table.CTableObject;
 import mamei.backend.db.mariadb.model.table.ColumnMetaObject;
 import mamei.backend.db.mariadb.model.table.TableObject;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Arrays.asList;
 
 @Service
 public class TableService {
@@ -27,9 +30,10 @@ public class TableService {
         return null;
     }
 
-    public List<String> getAllTablesFromDatabase(String database) {
-        List<String> tableNameList = new ArrayList<>();
-        return null;
+    public List<String> getAllTablesFromDatabase(String databaseName,String serverName) throws SQLException {
+        String result=dbSettingsUtility.preparedStatementWithOneParameter(DBQueryTableBasic.showTables,connection.createDatabaseConnection(serverName,databaseName),1);
+        List<String> tableNameList = asList(result.split("\n"));
+        return tableNameList;
     }
 
     public List<String> getTableFromDatabase(String database) {

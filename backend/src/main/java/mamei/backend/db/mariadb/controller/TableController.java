@@ -21,9 +21,14 @@ public class TableController {
         this.tableService = tableService;
     }
 
-    @GetMapping("/{database}/tables")
-    public ResponseEntity<List<String>> getAllTablesFromDatabase(@PathVariable String database) {
-        return new ResponseEntity<>(tableService.getAllTablesFromDatabase(database), HttpStatus.OK);
+    @GetMapping("/{database}/{serverName}/tables")
+    public ResponseEntity<List<String>> getAllTablesFromDatabase(@PathVariable String database, @PathVariable String serverName) {
+        try {
+            return new ResponseEntity<>(tableService.getAllTablesFromDatabase(database, serverName), HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
     @GetMapping("/database/table")
@@ -37,9 +42,9 @@ public class TableController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createTable(@RequestBody CTableObject tableObject){
+    public ResponseEntity<String> createTable(@RequestBody CTableObject tableObject) {
         try {
-            return new ResponseEntity(tableService.createTable(tableObject),HttpStatus.OK);
+            return new ResponseEntity(tableService.createTable(tableObject), HttpStatus.OK);
         } catch (SQLException e) {
             e.printStackTrace();
             return new ResponseEntity(HttpStatus.CONFLICT);
@@ -47,26 +52,26 @@ public class TableController {
     }
 
     @DeleteMapping("/delete")
-    public void deleteTable(){
-        tableService.dropTable(null,null);
+    public void deleteTable() {
+        tableService.dropTable(null, null);
     }
 
     @PostMapping("/createData")
-    public void addDataToTable(){
+    public void addDataToTable() {
         tableService.addDataToTable();
     }
 
     @DeleteMapping("/deleteData")
-    public void removeDataFromTable(){
+    public void removeDataFromTable() {
         tableService.removeDataFromTable();
     }
 
     @PostMapping("/information")
     public ResponseEntity<VTableObject> getTableInformation(@RequestBody CTableObject tableObject) {
         try {
-            if(tableService.checkTableExist(tableObject)){
+            if (tableService.checkTableExist(tableObject)) {
                 try {
-                    return new ResponseEntity<>(tableService.getTableContext(tableObject),HttpStatus.OK);
+                    return new ResponseEntity<>(tableService.getTableContext(tableObject), HttpStatus.OK);
                 } catch (SQLException e) {
                     e.printStackTrace();
                     return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -83,23 +88,5 @@ public class TableController {
     public ResponseEntity<List<String>> getTableFromDatabase(@PathVariable String database) {
         return new ResponseEntity<>(tableService.getTableFromDatabase(database), HttpStatus.OK);
     }
-    /*
-    @GetMapping("/test/{tableName}/{databaseName}/{serverName}")
-    public ResponseEntity<VTableObject> test(@PathVariable String tableName, @PathVariable String databaseName, @PathVariable String serverName) {
-        try {
-            if(tableService.checkTableExist(databaseName,tableName,serverName)){
-                try {
-                    return new ResponseEntity<>(tableService.getTableContext(tableName,databaseName,serverName),HttpStatus.OK);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    return new ResponseEntity<>(HttpStatus.CONFLICT);
-                }
-            }
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-     */
+
 }
