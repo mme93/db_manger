@@ -1,4 +1,4 @@
-package mamei.backend.db.mariadb.table.model;
+package mamei.backend.db.mariadb.config.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
