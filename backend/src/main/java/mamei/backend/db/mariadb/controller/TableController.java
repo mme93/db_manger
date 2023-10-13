@@ -1,7 +1,8 @@
 package mamei.backend.db.mariadb.controller;
 
 import mamei.backend.db.mariadb.model.table.CTableObject;
-import mamei.backend.db.mariadb.model.table.TableObject;
+import mamei.backend.db.mariadb.model.table.TableColumnDataInfo;
+import mamei.backend.db.mariadb.model.table.TableDataSetObj;
 import mamei.backend.db.mariadb.model.table.VTableObject;
 import mamei.backend.db.mariadb.service.TableService;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
+
+import static java.util.Arrays.asList;
 
 /**
  * Controller for Table Information and functionality.
@@ -54,37 +57,31 @@ public class TableController {
      * @param serverName
      */
     @DeleteMapping("/delete/{database}/{tableName}/{serverName}")
-    public void deleteTable(@PathVariable String database, @PathVariable String tableName, @PathVariable String serverName) {
+    public ResponseEntity deleteTable(@PathVariable String database, @PathVariable String tableName, @PathVariable String serverName) {
         try {
             tableService.dropTable(database, tableName,serverName);
+            return new ResponseEntity(HttpStatus.OK);
         } catch (SQLException e) {
             e.printStackTrace();
+            return new ResponseEntity(HttpStatus.CONFLICT);
         }
     }
 
-    @PostMapping("/update")
-    public void updateTable() {
-        tableService.addDataToTable();
-    }
-
-    @PostMapping("/createData")
-    public void addDataToTable() {
-        tableService.addDataToTable();
-    }
-
-    /**
-     * TODO: Muss noch click-test gemacht werden
-     *
-     * @param database
-     * @param id
-     * @param serverName
-     * @param tableName
-     * @return
-     */
-    @DeleteMapping("/deleteData/{database}/{tableName}/{serverName}/{id}")
-    public ResponseEntity removeDataFromTable(@PathVariable String database, @PathVariable String id, @PathVariable String serverName, @PathVariable String tableName) {
+    @PutMapping("/update")
+    public ResponseEntity updateTable(@RequestBody TableDataSetObj tableDataSetObj) {
         try {
-            tableService.removeDataFromTable(database,id,serverName,tableName);
+            tableService.updateDataSet(tableDataSetObj);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.CONFLICT);
+        }
+    }
+
+    @PostMapping("/createData/{database}/{tableName}/{serverName}")
+    public ResponseEntity addDataToTable(@PathVariable String database, @PathVariable String serverName, @PathVariable String tableName,@RequestBody List<TableColumnDataInfo>tableDataSetObjs) {
+        try {
+            tableService.addDataToTable( serverName, database,  tableName, tableDataSetObjs);
             return new ResponseEntity(HttpStatus.OK);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -93,7 +90,49 @@ public class TableController {
     }
 
     /**
-     * Create Table with Context from specific Database.
+     * TODO: Muss noch click-test gemacht werden
+     * Delete
+     *
+     * @param database
+     * @param id
+     * @param serverName
+     * @param tableName
+     * @return
+     */
+    @DeleteMapping("/deleteData/{database}/{tableName}/{serverName}/{id}")
+    public ResponseEntity removeDatasetFromTable(@PathVariable String database, @PathVariable String id, @PathVariable String serverName, @PathVariable String tableName) {
+        try {
+            tableService.removeDataSetFromTable(database,id,serverName,tableName);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.CONFLICT);
+        }
+    }
+
+    /**
+     * TODO: Muss noch click-test gemacht werden
+     * Delete
+     *
+     * @param database
+     * @param iDs
+     * @param serverName
+     * @param tableName
+     * @return
+     */
+    @DeleteMapping("/deleteData/{database}/{tableName}/{serverName}/{iDs}")
+    public ResponseEntity removeDataSetsFromTable(@PathVariable String database, @PathVariable String iDs, @PathVariable String serverName, @PathVariable String tableName) {
+        try {
+            tableService.removeDataSetsFromTable(database,asList(iDs.split(",")),serverName,tableName);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.CONFLICT);
+        }
+    }
+
+    /**
+     * Load Table with Context from specific Database.
      *
      * @param tableObject
      * @return VTableObject
@@ -117,7 +156,7 @@ public class TableController {
     }
 
     /**
-     * Create all Tables with Context, which contains in the Database.
+     * Load all Tables with Context, which contains in the Database.
      *
      * @param database
      * @param serverName

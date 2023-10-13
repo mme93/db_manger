@@ -1,10 +1,7 @@
 package mamei.backend.db.mariadb.service;
 
 import mamei.backend.db.mariadb.assets.DBQueryTableBasic;
-import mamei.backend.db.mariadb.model.table.CTableObject;
-import mamei.backend.db.mariadb.model.table.ColumnMetaObject;
-import mamei.backend.db.mariadb.model.table.TableObject;
-import mamei.backend.db.mariadb.model.table.VTableObject;
+import mamei.backend.db.mariadb.model.table.*;
 import mamei.backend.db.mariadb.utility.DBConnection;
 import mamei.backend.db.mariadb.utility.DBSettingsUtility;
 import org.springframework.stereotype.Service;
@@ -28,13 +25,13 @@ public class TableService {
     }
 
 
-    public List<VTableObject> getAllTablesFromDatabase(String databaseName,String serverName) throws SQLException {
-        String result=dbSettingsUtility.preparedStatementWithOneParameter(DBQueryTableBasic.showTables,connection.createDatabaseConnection(serverName,databaseName),1);
-        List<VTableObject>tableObjectList= new ArrayList<>();
-        for(String tableName:result.split("\n")){
-           tableObjectList.add(getTableContext(new CTableObject(tableName,databaseName,serverName,asList())));
+    public List<VTableObject> getAllTablesFromDatabase(String databaseName, String serverName) throws SQLException {
+        String result = dbSettingsUtility.preparedStatementWithOneParameter(DBQueryTableBasic.showTables, connection.createDatabaseConnection(serverName, databaseName), 1);
+        List<VTableObject> tableObjectList = new ArrayList<>();
+        for (String tableName : result.split("\n")) {
+            tableObjectList.add(getTableContext(new CTableObject(tableName, databaseName, serverName, asList())));
         }
-       return tableObjectList;
+        return tableObjectList;
     }
 
     public void createTable(CTableObject tableObject) throws SQLException {
@@ -42,22 +39,33 @@ public class TableService {
         dbSettingsUtility.onlyExcuteQuery(query, connection.createDatabaseConnection(tableObject.getServerName(), tableObject.getDatabaseName()));
     }
 
-    public void dropTable(String database, String table,String serverName) throws SQLException {
-        String query = DBQueryTableBasic.dropTable+table;
+    public void dropTable(String database, String table, String serverName) throws SQLException {
+        String query = DBQueryTableBasic.dropTable + table;
         dbSettingsUtility.onlyExcuteQuery(query, connection.createDatabaseConnection(serverName, database));
     }
 
-    public void getTableInformation(String database, String table) {
-
+    public void updateDataSet(TableDataSetObj tableDataSetObj) throws SQLException {
+        for (List<TableColumnDataInfo> tableColumnDataInfoList : tableDataSetObj.getTableColumnDataInfoList()) {
+            String query = createUpdateQuery(tableColumnDataInfoList,tableDataSetObj.getDbServer().getTableName());
+            dbSettingsUtility.onlyExcuteQuery(query, connection.createDatabaseConnection(tableDataSetObj.getDbServer().getServerName(), tableDataSetObj.getDbServer().getDatabaseName()));
+        }
     }
 
-    public void addDataToTable() {
-
+    public void addDataToTable(String serverName, String database, String tableName, List<TableColumnDataInfo> tableDataSetObjs) throws SQLException {
+        String query = createInsertQuery(tableName, tableDataSetObjs);
+        dbSettingsUtility.onlyExcuteQuery(query, connection.createDatabaseConnection(serverName, database));
     }
 
-    public void removeDataFromTable(String database, String id, String serverName, String tableName) throws SQLException {
-        String query="DELETE FROM "+tableName+" WHERE id ="+id;
-        dbSettingsUtility.onlyExcuteQuery(query,connection.createDatabaseConnection(serverName,database));
+    public void removeDataSetsFromTable(String database, List<String> iDs, String serverName, String tableName) throws SQLException {
+        for (String id : iDs) {
+            String query = "DELETE FROM " + tableName + " WHERE id =" + id;
+            dbSettingsUtility.onlyExcuteQuery(query, connection.createDatabaseConnection(serverName, database));
+        }
+    }
+
+    public void removeDataSetFromTable(String database, String id, String serverName, String tableName) throws SQLException {
+        String query = "DELETE FROM " + tableName + " WHERE id =" + id;
+        dbSettingsUtility.onlyExcuteQuery(query, connection.createDatabaseConnection(serverName, database));
     }
 
 
@@ -107,12 +115,12 @@ public class TableService {
             if (i != columnList.size() - 1) {
                 stringBuilder.append(createRowQuery(columnList.get(i)) + ", \n");
                 if (columnList.get(i).getCOLUMN_KEY() != null && !columnList.get(i).getCOLUMN_KEY().toLowerCase(Locale.ROOT).contains("null")) {
-                    stringBuilder.append("PRIMARY KEY ("+columnList.get(i).getColumnName() + "), \n");
+                    stringBuilder.append("PRIMARY KEY (" + columnList.get(i).getColumnName() + "), \n");
                 }
             } else {
                 stringBuilder.append(createRowQuery(columnList.get(i)) + "\n )");
                 if (columnList.get(i).getCOLUMN_KEY() != null && !columnList.get(i).getCOLUMN_KEY().toLowerCase(Locale.ROOT).contains("null")) {
-                    stringBuilder.append("PRIMARY KEY ("+columnList.get(i).getColumnName() + ")\n )");
+                    stringBuilder.append("PRIMARY KEY (" + columnList.get(i).getColumnName() + ")\n )");
                 }
             }
         }
@@ -122,10 +130,8 @@ public class TableService {
     public String createRowQuery(ColumnMetaObject columnMetaObject) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(columnMetaObject.getColumnName() + " ");
-       // if (columnMetaObject.getMySQLDataTypeEnum() != null) {
-      //      stringBuilder.append(columnMetaObject.getMySQLDataTypeEnum() + " ");
-      //  }
-        if (columnMetaObject.getCOLUMN_TYPE()!=null && !columnMetaObject.getCOLUMN_TYPE().toLowerCase(Locale.ROOT).contains("null")) {
+
+        if (columnMetaObject.getCOLUMN_TYPE() != null && !columnMetaObject.getCOLUMN_TYPE().toLowerCase(Locale.ROOT).contains("null")) {
             stringBuilder.append(columnMetaObject.getCOLUMN_TYPE() + " ");
         }
         if (columnMetaObject.isIS_NULLABLE()) {
@@ -142,4 +148,44 @@ public class TableService {
         return stringBuilder.toString();
     }
 
+    public String createInsertQuery(String tableName, List<TableColumnDataInfo> tableDataSetObjs) {
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("INSERT INTO " + tableName + " (");
+        for (int i = 0; i < tableDataSetObjs.size(); i++) {
+            queryBuilder.append(tableDataSetObjs.get(i).getColumnName());
+            if (i != tableDataSetObjs.size() - 1) {
+                queryBuilder.append(", ");
+            }
+        }
+        queryBuilder.append(") VALUES (");
+        for (int i = 0; i < tableDataSetObjs.size(); i++) {
+            if (tableDataSetObjs.get(i).isString()) {
+                queryBuilder.append("'" + tableDataSetObjs.get(i).getColumnName() + "'");
+            } else if (!tableDataSetObjs.get(i).isString()) {
+                queryBuilder.append(tableDataSetObjs.get(i).getColumnName());
+            }
+            if (i != tableDataSetObjs.size() - 1) {
+                queryBuilder.append(", ");
+            }
+        }
+        queryBuilder.append(" )");
+        return queryBuilder.toString();
+    }
+
+    private String createUpdateQuery(List<TableColumnDataInfo> tableColumnDataInfoList, String tableName) {
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("UPDATE "+tableName+" SET");
+        for (int i = 0; i < tableColumnDataInfoList.size(); i++) {
+            if (tableColumnDataInfoList.get(i).isString()) {
+                queryBuilder.append(tableColumnDataInfoList.get(i).getColumnName()+" = '" + tableColumnDataInfoList.get(i).getValue() + "'");
+            } else if (!tableColumnDataInfoList.get(i).isString()) {
+                queryBuilder.append(tableColumnDataInfoList.get(i).getColumnName());
+            }
+            if (i != tableColumnDataInfoList.size() - 1) {
+                queryBuilder.append(", ");
+            }
+        }
+        queryBuilder.append(" WHERE id = "+tableColumnDataInfoList.get(0).getId());
+        return queryBuilder.toString();
+    }
 }
