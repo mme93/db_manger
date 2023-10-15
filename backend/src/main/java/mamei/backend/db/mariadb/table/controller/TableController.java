@@ -1,5 +1,6 @@
 package mamei.backend.db.mariadb.table.controller;
 
+import mamei.backend.db.mariadb.config.model.DBServer;
 import mamei.backend.db.mariadb.table.model.object.CTableObject;
 import mamei.backend.db.mariadb.table.model.object.TableColumnDataInfo;
 import mamei.backend.db.mariadb.table.model.object.TableDataSetObj;
@@ -28,8 +29,6 @@ public class TableController {
     }
 
     /**
-     * TODO: Vorher prüfen ob ich Tabelle vorhanden ist
-     *
      * Create a new Table.
      *
      * @param tableObject
@@ -52,14 +51,12 @@ public class TableController {
     /**
      * Delete Table from Database.
      *
-     * @param database
-     * @param tableName
-     * @param serverName
+     * @param dbServer
      */
-    @DeleteMapping("/delete/{database}/{tableName}/{serverName}")
-    public ResponseEntity deleteTable(@PathVariable String database, @PathVariable String tableName, @PathVariable String serverName) {
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteTable(@RequestBody DBServer dbServer) {
         try {
-            tableService.dropTable(database, tableName,serverName);
+            tableService.dropTable(dbServer);
             return new ResponseEntity(HttpStatus.OK);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -90,19 +87,16 @@ public class TableController {
     }
 
     /**
-     * TODO: Muss noch click-test gemacht werden
-     * Delete
+     * Delete dataset from Table by Id.
      *
-     * @param database
+     * @param dbServer
      * @param id
-     * @param serverName
-     * @param tableName
      * @return
      */
-    @DeleteMapping("/deleteData/{database}/{tableName}/{serverName}/{id}")
-    public ResponseEntity removeDatasetFromTable(@PathVariable String database, @PathVariable String id, @PathVariable String serverName, @PathVariable String tableName) {
+    @DeleteMapping("/deleteData/{id}")
+    public ResponseEntity removeDatasetFromTable(@RequestBody DBServer dbServer, @PathVariable String id) {
         try {
-            tableService.removeDataSetFromTable(database,id,serverName,tableName);
+            tableService.removeDataSetFromTable(dbServer,id);
             return new ResponseEntity(HttpStatus.OK);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -114,16 +108,14 @@ public class TableController {
      * TODO: Muss noch click-test gemacht werden
      * Delete
      *
-     * @param database
+     * @param dbServer
      * @param iDs
-     * @param serverName
-     * @param tableName
      * @return
      */
-    @DeleteMapping("/deleteData/{database}/{tableName}/{serverName}/{iDs}")
-    public ResponseEntity removeDataSetsFromTable(@PathVariable String database, @PathVariable String iDs, @PathVariable String serverName, @PathVariable String tableName) {
+    @DeleteMapping("/deleteData/{iDs}")
+    public ResponseEntity removeDataSetsFromTable(@RequestBody DBServer dbServer, @PathVariable String iDs) {
         try {
-            tableService.removeDataSetsFromTable(database,asList(iDs.split(",")),serverName,tableName);
+            tableService.removeDataSetsFromTable(dbServer,asList(iDs.split(",")));
             return new ResponseEntity(HttpStatus.OK);
         } catch (SQLException e) {
             e.printStackTrace();
