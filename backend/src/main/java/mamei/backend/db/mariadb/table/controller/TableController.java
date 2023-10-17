@@ -105,7 +105,6 @@ public class TableController {
     }
 
     /**
-     * TODO: Muss noch click-test gemacht werden
      * Delete
      *
      * @param dbServer

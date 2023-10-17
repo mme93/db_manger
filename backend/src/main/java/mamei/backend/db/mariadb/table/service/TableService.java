@@ -16,6 +16,10 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 
+/**
+ * TODO: SQL-Statements auslagern in den {@link TableQueryGenerator}.
+ */
+
 @Service
 public class TableService {
 
@@ -41,7 +45,7 @@ public class TableService {
         String result = dbSettingsUtility.preparedStatementWithOneParameter(DBQueryTableBasic.showTables, connection.createDatabaseConnection(serverName, databaseName), 1);
         List<VTableObject> tableObjectList = new ArrayList<>();
         for (String tableName : result.split("\n")) {
-            tableObjectList.add(getTableContext(new CTableObject(new DBServer(serverName,databaseName,tableName), asList())));
+            tableObjectList.add(getTableContext(new CTableObject(new DBServer(serverName, databaseName, tableName), asList())));
         }
         return tableObjectList;
     }
@@ -58,7 +62,7 @@ public class TableService {
 
     public void updateDataSet(TableDataSetObj tableDataSetObj) throws SQLException {
         for (List<TableColumnDataInfo> tableColumnDataInfoList : tableDataSetObj.getTableColumnDataInfoList()) {
-            String query = tableQueryGenerator.createUpdateQuery(tableColumnDataInfoList,tableDataSetObj.getDbServer().getTableName());
+            String query = tableQueryGenerator.createUpdateQuery(tableColumnDataInfoList, tableDataSetObj.getDbServer().getTableName());
             dbSettingsUtility.onlyExcuteQuery(query, connection.createDatabaseConnection(tableDataSetObj.getDbServer().getServerName(), tableDataSetObj.getDbServer().getDatabaseName()));
         }
     }
@@ -75,6 +79,13 @@ public class TableService {
         }
     }
 
+    /**
+     * Remove one dataset from table.
+     *
+     * @param dbServer
+     * @param id
+     * @throws SQLException
+     */
     public void removeDataSetFromTable(DBServer dbServer, String id) throws SQLException {
         String query = "DELETE FROM " + dbServer.getTableName() + " WHERE id =" + id;
         dbSettingsUtility.onlyExcuteQuery(query, connection.createDatabaseConnection(dbServer.getServerName(), dbServer.getDatabaseName()));
