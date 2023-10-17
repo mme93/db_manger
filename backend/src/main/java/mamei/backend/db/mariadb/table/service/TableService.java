@@ -99,14 +99,14 @@ public class TableService {
      * @throws SQLException
      */
     public VTableObject getTableContext(CTableObject cTableObject) throws SQLException {
-        TableObject tableObject = new TableObject(cTableObject.getDbServer().getTableName(), cTableObject.getDbServer().getDatabaseName(), cTableObject.getDbServer().getServerName());
-        tableObject.initTable(connection.createConnection(cTableObject.getDbServer().getServerName()));
+        LoadTableObject loadTableObject = new LoadTableObject(cTableObject.getDbServer().getTableName(), cTableObject.getDbServer().getDatabaseName(), cTableObject.getDbServer().getServerName());
+        loadTableObject.initTable(connection.createConnection(cTableObject.getDbServer().getServerName()));
         return new VTableObject(
-                tableObject.getTableName(),
-                tableObject.getDatabaseName(),
-                tableObject.getServerName(),
-                tableObject.getCColumnMetaObjectList(),
-                tableObject.loadTableContext(connection.createDatabaseConnection(cTableObject.getDbServer().getServerName(), cTableObject.getDbServer().getDatabaseName()))
+                loadTableObject.getTableName(),
+                loadTableObject.getDatabaseName(),
+                loadTableObject.getServerName(),
+                loadTableObject.getCColumnMetaObjectList(),
+                loadTableObject.loadTableContext(connection.createDatabaseConnection(cTableObject.getDbServer().getServerName(), cTableObject.getDbServer().getDatabaseName()))
         );
     }
 
