@@ -2,6 +2,7 @@ package mamei.backend.db.mariadb.table.service;
 
 import mamei.backend.db.mariadb.config.assets.DBQueryTableBasic;
 import mamei.backend.db.mariadb.config.model.DBServer;
+import mamei.backend.db.mariadb.table.model.create.CTableObject;
 import mamei.backend.db.mariadb.table.model.object.*;
 import mamei.backend.db.mariadb.table.model.view.VTableObject;
 import mamei.backend.db.mariadb.config.utils.DBConnection;
@@ -28,19 +29,26 @@ public class TableService {
         this.connection = connection;
     }
 
-
+    /**
+     * Get all tables with context from specific database.
+     *
+     * @param databaseName
+     * @param serverName
+     * @return
+     * @throws SQLException
+     */
     public List<VTableObject> getAllTablesFromDatabase(String databaseName, String serverName) throws SQLException {
         String result = dbSettingsUtility.preparedStatementWithOneParameter(DBQueryTableBasic.showTables, connection.createDatabaseConnection(serverName, databaseName), 1);
         List<VTableObject> tableObjectList = new ArrayList<>();
         for (String tableName : result.split("\n")) {
-            tableObjectList.add(getTableContext(new CTableObject(tableName, databaseName, serverName, asList())));
+            tableObjectList.add(getTableContext(new CTableObject(new DBServer(serverName,databaseName,tableName), asList())));
         }
         return tableObjectList;
     }
 
     public void createTable(CTableObject tableObject) throws SQLException {
-        String query = tableQueryGenerator.createTableQuery(tableObject.getColumnList(), tableObject.getTableName());
-        dbSettingsUtility.onlyExcuteQuery(query, connection.createDatabaseConnection(tableObject.getServerName(), tableObject.getDatabaseName()));
+        String query = tableQueryGenerator.createTableQuery(tableObject.getColumnList(), tableObject.getDbServer().getTableName());
+        dbSettingsUtility.onlyExcuteQuery(query, connection.createDatabaseConnection(tableObject.getDbServer().getServerName(), tableObject.getDbServer().getDatabaseName()));
     }
 
     public void dropTable(DBServer dbServer) throws SQLException {
@@ -72,16 +80,22 @@ public class TableService {
         dbSettingsUtility.onlyExcuteQuery(query, connection.createDatabaseConnection(dbServer.getServerName(), dbServer.getDatabaseName()));
     }
 
-
+    /**
+     * Load table context from database.
+     *
+     * @param cTableObject
+     * @return
+     * @throws SQLException
+     */
     public VTableObject getTableContext(CTableObject cTableObject) throws SQLException {
-        TableObject tableObject = new TableObject(cTableObject.getTableName(), cTableObject.getDatabaseName(), cTableObject.getServerName());
-        tableObject.initTable(connection.createConnection(cTableObject.getServerName()));
+        TableObject tableObject = new TableObject(cTableObject.getDbServer().getTableName(), cTableObject.getDbServer().getDatabaseName(), cTableObject.getDbServer().getServerName());
+        tableObject.initTable(connection.createConnection(cTableObject.getDbServer().getServerName()));
         return new VTableObject(
                 tableObject.getTableName(),
                 tableObject.getDatabaseName(),
                 tableObject.getServerName(),
-                tableObject.getColumnMetaObjectList(),
-                tableObject.loadTableContext(connection.createDatabaseConnection(cTableObject.getServerName(), cTableObject.getDatabaseName()))
+                tableObject.getCColumnMetaObjectList(),
+                tableObject.loadTableContext(connection.createDatabaseConnection(cTableObject.getDbServer().getServerName(), cTableObject.getDbServer().getDatabaseName()))
         );
     }
 
@@ -91,11 +105,11 @@ public class TableService {
      * @throws SQLException
      */
     public boolean checkTableExist(CTableObject tableObject) throws SQLException {
-        Connection connection = this.connection.createConnection(tableObject.getServerName());
+        Connection connection = this.connection.createConnection(tableObject.getDbServer().getServerName());
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?")) {
-            preparedStatement.setString(1, tableObject.getDatabaseName());
-            preparedStatement.setString(2, tableObject.getTableName());
+            preparedStatement.setString(1, tableObject.getDbServer().getDatabaseName());
+            preparedStatement.setString(2, tableObject.getDbServer().getTableName());
 
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {

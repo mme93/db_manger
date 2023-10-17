@@ -1,7 +1,7 @@
 package mamei.backend.db.mariadb.table.controller;
 
 import mamei.backend.db.mariadb.config.model.DBServer;
-import mamei.backend.db.mariadb.table.model.object.CTableObject;
+import mamei.backend.db.mariadb.table.model.create.CTableObject;
 import mamei.backend.db.mariadb.table.model.object.TableColumnDataInfo;
 import mamei.backend.db.mariadb.table.model.object.TableDataSetObj;
 import mamei.backend.db.mariadb.table.model.view.VTableObject;
@@ -150,14 +150,12 @@ public class TableController {
     /**
      * Load all Tables with Context, which contains in the Database.
      *
-     * @param database
-     * @param serverName
-     * @return
+     * @return {@link List<VTableObject>}
      */
-    @GetMapping("/{database}/{serverName}/tables")
-    public ResponseEntity<List<VTableObject>> getAllTablesFromDatabase(@PathVariable String database, @PathVariable String serverName) {
+    @GetMapping("/all")
+    public ResponseEntity<List<VTableObject>> getAllTablesFromDatabase(@RequestBody DBServer dbServer) {
         try {
-            return new ResponseEntity<>(tableService.getAllTablesFromDatabase(database, serverName), HttpStatus.OK);
+            return new ResponseEntity<>(tableService.getAllTablesFromDatabase(dbServer.getDatabaseName(), dbServer.getServerName()), HttpStatus.OK);
         } catch (SQLException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.CONFLICT);

@@ -1,6 +1,6 @@
 package mamei.backend.db.mariadb.table.utils;
 
-import mamei.backend.db.mariadb.table.model.object.ColumnMetaObject;
+import mamei.backend.db.mariadb.table.model.create.CColumnMetaObject;
 import mamei.backend.db.mariadb.table.model.object.TableColumnDataInfo;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.Locale;
 @Service
 public class TableQueryGenerator {
 
-    public String createTableQuery(List<ColumnMetaObject> columnList, String tableName) {
+    public String createTableQuery(List<CColumnMetaObject> columnList, String tableName) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("CREATE TABLE " + tableName + " ( ");
         for (int i = 0; i < columnList.size(); i++) {
@@ -32,23 +32,23 @@ public class TableQueryGenerator {
         return stringBuilder.toString();
     }
 
-    public String createRowQuery(ColumnMetaObject columnMetaObject) {
+    public String createRowQuery(CColumnMetaObject CColumnMetaObject) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(columnMetaObject.getColumnName() + " ");
+        stringBuilder.append(CColumnMetaObject.getColumnName() + " ");
 
-        if (columnMetaObject.getCOLUMN_TYPE() != null && !columnMetaObject.getCOLUMN_TYPE().toLowerCase(Locale.ROOT).contains("null")) {
-            stringBuilder.append(columnMetaObject.getCOLUMN_TYPE() + " ");
+        if (CColumnMetaObject.getCOLUMN_TYPE() != null && !CColumnMetaObject.getCOLUMN_TYPE().toLowerCase(Locale.ROOT).contains("null")) {
+            stringBuilder.append(CColumnMetaObject.getCOLUMN_TYPE() + " ");
         }
-        if (columnMetaObject.isIS_NULLABLE()) {
+        if (CColumnMetaObject.isIS_NULLABLE()) {
             stringBuilder.append("NULL ");
-        } else if (!columnMetaObject.isIS_NULLABLE()) {
+        } else if (!CColumnMetaObject.isIS_NULLABLE()) {
             stringBuilder.append("NOT NULL ");
         }
-        if (columnMetaObject.getCOLUMN_DEFAULT() != null && !columnMetaObject.getCOLUMN_DEFAULT().toLowerCase(Locale.ROOT).contains("null")) {
-            stringBuilder.append(columnMetaObject.getCOLUMN_DEFAULT() + " ");
+        if (CColumnMetaObject.getCOLUMN_DEFAULT() != null && !CColumnMetaObject.getCOLUMN_DEFAULT().toLowerCase(Locale.ROOT).contains("null")) {
+            stringBuilder.append(CColumnMetaObject.getCOLUMN_DEFAULT() + " ");
         }
-        if (columnMetaObject.getEXTRA() != null && !columnMetaObject.getEXTRA().toLowerCase(Locale.ROOT).contains("null")) {
-            stringBuilder.append(columnMetaObject.getEXTRA() + " ");
+        if (CColumnMetaObject.getEXTRA() != null && !CColumnMetaObject.getEXTRA().toLowerCase(Locale.ROOT).contains("null")) {
+            stringBuilder.append(CColumnMetaObject.getEXTRA() + " ");
         }
         return stringBuilder.toString();
     }
