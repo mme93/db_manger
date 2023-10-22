@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/css/main.css}" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="page_header">
+    <h1 class="page_title">DB Manger - Database Overview</h1>
+</div>
+
+<div class="page_panel">
+    <p th:text="${serverName}">Servername: </p>
+    <p th:text="${databaseName}">Databasename: </p>
+</div>
+
+</body>
+</html>

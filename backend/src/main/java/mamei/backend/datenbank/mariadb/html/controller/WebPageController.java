@@ -5,15 +5,16 @@ import mamei.backend.datenbank.mariadb.html.service.OverviewPageService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/web")
-public class WebOverviewPageController {
+public class WebPageController {
 
     private final OverviewPageService overviewPageService;
 
-    public WebOverviewPageController(OverviewPageService overviewPageService) {
+    public WebPageController(OverviewPageService overviewPageService) {
         this.overviewPageService = overviewPageService;
     }
 
@@ -21,6 +22,13 @@ public class WebOverviewPageController {
     public String overviewPage(Model model) {
         model.addAttribute("serverNameList", overviewPageService.getServerNameList());
         return "html/overviewPage";
+    }
+
+    @GetMapping("/tables/{serverName}/{databaseName}")
+    public String getDatabaseOverview(@PathVariable String databaseName, @PathVariable String serverName, Model model){
+        model.addAttribute("serverName", serverName);
+        model.addAttribute("databaseName", databaseName);
+        return "html/databaseOverviewPage";
     }
 
 }

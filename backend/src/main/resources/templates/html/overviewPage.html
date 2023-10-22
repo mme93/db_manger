@@ -38,6 +38,10 @@
         let databaseList = document.getElementById('databaseList');
         let loadConfigButton = document.getElementById('loadConfig');
 
+        select.addEventListener('change', function () {
+            databaseList.innerHTML = '';
+        })
+
         loadConfigButton.addEventListener('click', function () {
             fetch('http://localhost:8998/database/' + select.value + '/names', {method: 'POST'})
                 .then(response => response.json())
@@ -53,7 +57,7 @@
                         const button = document.createElement('button');
                         button.textContent = 'Open';
                         button.addEventListener('click', function () {
-                            listItem.remove();
+                            window.location.href='http://localhost:8998/web/tables/'+ select.value+'/'+databaseName;
                         });
 
                         listItem.appendChild(button);
