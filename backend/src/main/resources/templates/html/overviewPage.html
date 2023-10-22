@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/css/overviewPage.css}" rel="stylesheet"/>
+    <link th:href="@{/css/main.css}" rel="stylesheet"/>
+</head>
+<body>
+<div class="page_header">
+    <h1 class="page_title">DB Manger</h1>
+</div>
+
+<div class="page_panel">
+    <div>
+        <label for="linuxServer">Choose a Server for MariaDB:</label>
+        <select name="linuxServer" id="linuxServer" style="width: 100%">
+            <option th:each="server : ${serverNameList}"
+                    th:value="${server.value}"
+                    th:text="${server.name}">Server Name
+            </option>
+        </select>
+        <button style="width: 100%" type="submit" id="loadConfig" name="loadConfig">
+            Load Table
+        </button>
+    </div>
+
+
+    <div name="databaseList" id="databaseList">
+
+    </div>
+
+</div>
+
+<script type="text/javascript" th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        let select = document.getElementById('linuxServer');
+        let databaseList = document.getElementById('databaseList');
+        select.addEventListener('change', function () {
+
+        });
+        let loadConfigButton = document.getElementById('loadConfig');
+        loadConfigButton.addEventListener('click', function () {
+            fetch('http://localhost:8998/overview/' + select.text + '/databases')
+                .then(response => response.json())
+                .then(data => {
+                    databaseList.innerHTML = '';
+                    const h4Tile=document.createElement('h4');
+                    h4Tile.textContent="Database Overview"
+                    databaseList.appendChild(h4Tile);
+                    data.forEach(databaseName => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = databaseName;
+                        listItem.classList.add('database-list-item');
+                        const button = document.createElement('button');
+                        button.textContent = 'Open';
+                        button.addEventListener('click', function () {
+                            listItem.remove();
+                        });
+
+                        listItem.appendChild(button);
+                        databaseList.appendChild(listItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Fehler beim Abrufen der Datenbanken: ' + error);
+                });
+        });
+    });
+</script>
+
+</body>
+</html>

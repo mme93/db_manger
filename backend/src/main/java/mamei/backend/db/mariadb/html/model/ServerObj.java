@@ -5,11 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class TableObj {
+public class ServerObj {
 
-    private String tableName;
+    private String value;
+    private String name;
+    private List<DataBaseObj> dataBaseObjs;
+
 }

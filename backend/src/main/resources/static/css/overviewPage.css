@@ -1,0 +1,11 @@
+.database-list-item {
+    display: flex;
+    justify-content: space-between;
+    border-style: solid;
+    margin-bottom: 3px;
+}
+
+.database-list-item button {
+    margin-left: 10px;
+    width: 200px;
+}
