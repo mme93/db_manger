@@ -1,7 +1,7 @@
 package mamei.backend.db.mariadb.server.service;
 
 import mamei.backend.db.mariadb.html.model.DataBaseObj;
-import mamei.backend.db.mariadb.html.model.ServerNameObj;
+import mamei.backend.datenbank.mariadb.html.model.ServerNameObj;
 import mamei.backend.db.mariadb.html.model.ServerObj;
 import mamei.backend.db.mariadb.html.model.TableObj;
 import org.springframework.stereotype.Service;
