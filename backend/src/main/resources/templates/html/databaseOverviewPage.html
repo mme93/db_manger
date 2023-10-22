@@ -12,8 +12,9 @@
 </div>
 
 <div class="page_panel">
-    <p th:text="${serverName}">Servername: </p>
-    <p th:text="${databaseName}">Databasename: </p>
+    <p>Servername: <span th:text="${serverName}">[Servername]</span></p>
+    <p>Databasename: <span th:text="${databaseName}">[Databasename]</span></p>
+    <h4 style="border-top-style: solid">Table Overview:</h4>
 </div>
 
 </body>
