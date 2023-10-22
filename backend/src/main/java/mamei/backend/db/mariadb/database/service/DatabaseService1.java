@@ -7,11 +7,11 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Service
-public class DatabaseService {
+public class DatabaseService1 {
 
     private final DBSettingsUtility dbSettingsUtility;
 
-    public DatabaseService(DBSettingsUtility dbSettingsUtility) {
+    public DatabaseService1(DBSettingsUtility dbSettingsUtility) {
         this.dbSettingsUtility = dbSettingsUtility;
     }
 

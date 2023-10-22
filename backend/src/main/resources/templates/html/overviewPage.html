@@ -36,17 +36,15 @@
     document.addEventListener('DOMContentLoaded', function () {
         let select = document.getElementById('linuxServer');
         let databaseList = document.getElementById('databaseList');
-        select.addEventListener('change', function () {
-
-        });
         let loadConfigButton = document.getElementById('loadConfig');
+
         loadConfigButton.addEventListener('click', function () {
-            fetch('http://localhost:8998/overview/' + select.text + '/databases')
+            fetch('http://localhost:8998/database/' + select.value + '/names', {method: 'POST'})
                 .then(response => response.json())
                 .then(data => {
                     databaseList.innerHTML = '';
-                    const h4Tile=document.createElement('h4');
-                    h4Tile.textContent="Database Overview"
+                    const h4Tile = document.createElement('h4');
+                    h4Tile.textContent = "Database Overview"
                     databaseList.appendChild(h4Tile);
                     data.forEach(databaseName => {
                         const listItem = document.createElement('li');

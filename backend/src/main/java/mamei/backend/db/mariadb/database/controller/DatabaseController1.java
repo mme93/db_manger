@@ -1,6 +1,6 @@
 package mamei.backend.db.mariadb.database.controller;
 
-import mamei.backend.db.mariadb.database.service.DatabaseService;
+import mamei.backend.db.mariadb.database.service.DatabaseService1;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,15 +12,15 @@ import java.util.List;
  *  Information about Databases and his Tables
  */
 @RestController
-@RequestMapping("/database")
-public class DatabaseController {
+@RequestMapping("/database1")
+public class DatabaseController1 {
 
-    private final DatabaseService databaseService;
+    private final DatabaseService1 databaseService;
 
     /**
      * @param databaseService Service for prepareStatements for Databases
      */
-    public DatabaseController(DatabaseService databaseService) {
+    public DatabaseController1(DatabaseService1 databaseService) {
         this.databaseService = databaseService;
     }
 

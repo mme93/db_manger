@@ -1,4 +1,4 @@
-package mamei.backend.datenbank.mariadb.db.util;
+package mamei.backend.datenbank.mariadb.db.util.sqlgenerator;
 
 import org.springframework.stereotype.Service;
 

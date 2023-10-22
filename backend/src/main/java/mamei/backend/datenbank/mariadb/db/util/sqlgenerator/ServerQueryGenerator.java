@@ -1,11 +1,11 @@
-package mamei.backend.datenbank.mariadb.db.util;
+package mamei.backend.datenbank.mariadb.db.util.sqlgenerator;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public class ServerQueryGenerator {
 
-    public String showAllDatabaseFromServer(String servername){
+    public String showAllDatabaseFromServer(){
         return "SHOW DATABASES";
     }
 }
