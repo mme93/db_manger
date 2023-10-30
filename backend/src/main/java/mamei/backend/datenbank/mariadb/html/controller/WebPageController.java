@@ -28,6 +28,7 @@ public class WebPageController {
     @GetMapping("/table/{tableName}")
     public String getTableContext(Model model, @PathVariable String tableName) {
         model.addAttribute("tableName", tableName);
+        tableService.getTableContext();
         return "html/tablePage";
     }
 

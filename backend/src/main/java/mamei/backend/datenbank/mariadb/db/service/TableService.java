@@ -22,6 +22,9 @@ public class TableService {
         this.tableQueryGenerator = tableQueryGenerator;
     }
 
+    public void getTableContext(){
+
+    }
     public List<String> getTableNamesFromDatabase(DatabaseServer databaseServer) throws SQLException {
         List<String>tableNames= new ArrayList<>();
         Connection connection = this.connectionService.createConnection(databaseServer.getServerName(),databaseServer.getDatabaseName());

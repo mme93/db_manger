@@ -38,6 +38,7 @@
         let loadButton = document.getElementById('loadTable');
         loadButton.addEventListener('click', function () {
             let tableName = loadButton.getAttribute('data-tablename');
+            /*
             fetch('http://localhost:8998/database/' + select.value + '/names', {method: 'POST'})
                 .then(response => response.json())
                 .then(data => {
@@ -46,7 +47,12 @@
                 .catch(error => {
                     console.error('Fehler beim Abrufen der Datenbanken: ' + error);
                 });
+
+             */
+            window.location.href='http://localhost:8998/web/table/'+ tableName;
         });
+
+
     });
 </script>
 </body>
