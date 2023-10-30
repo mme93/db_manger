@@ -2,8 +2,7 @@ package mamei.backend.datenbank.mariadb.html.controller;
 
 
 import mamei.backend.datenbank.mariadb.html.service.OverviewPageService;
-import mamei.backend.datenbank.mariadb.html.service.TableService;
-import mamei.backend.db.mariadb.config.model.DBServer;
+import mamei.backend.datenbank.mariadb.db.service.TableService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
