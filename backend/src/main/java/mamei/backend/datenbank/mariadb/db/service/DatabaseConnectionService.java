@@ -1,8 +1,8 @@
 package mamei.backend.datenbank.mariadb.db.service;
 
 
+import mamei.backend.datenbank.mariadb.db.constants.DBSettingsConstants;
 import mamei.backend.datenbank.mariadb.db.util.Check;
-import mamei.backend.db.mariadb.config.assets.DBSettingsConstants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

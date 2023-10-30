@@ -24,13 +24,13 @@ public class TableService {
 
     public List<String> getTableNamesFromDatabase(DatabaseServer databaseServer) throws SQLException {
         List<String>tableNames= new ArrayList<>();
-        Connection connection = this.connectionService.createConnection(databaseServer.getServerName());
+        Connection connection = this.connectionService.createConnection(databaseServer.getServerName(),databaseServer.getDatabaseName());
         String query = tableQueryGenerator.generateQueryAllTableNamesFromDatabase();
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         ResultSet resultSet = preparedStatement.executeQuery();
         while(resultSet.next()){
             String tableName = resultSet.getString(1); // Der Index 1 entspricht dem Tabellennamen
-            System.out.println("Table Name: " + tableName);
+            tableNames.add(tableName);
         }
         resultSet.close();
         preparedStatement.close();

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/css/main.css}" rel="stylesheet"/>
+    <link th:href="@{/css/databaseOverviewPage.css}" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="page_header">
+    <h1 class="page_title">DB Manger - Database Overview</h1>
+</div>
+
+<div class="database_panel">
+    <div class="flex-container">
+        <p >Servername: <strong><span th:text="${serverName}">[Servername]</span></strong></p>
+        <p>Databasename: <strong><span th:text="${databaseName}">[Databasename]</span></strong></p>
+        <div class="buttons">
+            <button>Create Table</button>
+            <button>Overview</button>
+        </div>
+    </div>
+
+
+    <div>
+        <h4>Table Overview:</h4>
+        <ul>
+            <li th:each="tableName : ${tableNames}">
+                <span th:text="${tableName}"></span>
+                <button id="loadTable" name="loadTable" th:attr="data-tablename=${tableName}">Open</button>
+            </li>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        let loadButton = document.getElementById('loadTable');
+        loadButton.addEventListener('click', function () {
+            let tableName = loadButton.getAttribute('data-tablename');
+            fetch('http://localhost:8998/database/' + select.value + '/names', {method: 'POST'})
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href='http://localhost:8998/web/tables/'+ select.value+'/'+databaseName;
+                })
+                .catch(error => {
+                    console.error('Fehler beim Abrufen der Datenbanken: ' + error);
+                });
+        });
+    });
+</script>
+</body>
+</html>
