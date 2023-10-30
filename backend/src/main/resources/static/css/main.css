@@ -2,7 +2,7 @@
     text-align: center;
 }
 .page_header{
-    border-bottom-style: inset;
+    border-bottom-style: solid;
     border-bottom-color: #FFA500;
 }
 .page_panel{

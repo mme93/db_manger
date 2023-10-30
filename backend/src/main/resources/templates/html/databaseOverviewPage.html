@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link th:href="@{/css/main.css}" rel="stylesheet"/>
+    <link th:href="@{/css/databaseOverviewPage.css}" rel="stylesheet"/>
 </head>
 <body>
 
@@ -11,10 +12,20 @@
     <h1 class="page_title">DB Manger - Database Overview</h1>
 </div>
 
-<div class="page_panel">
-    <p>Servername: <span th:text="${serverName}">[Servername]</span></p>
-    <p>Databasename: <span th:text="${databaseName}">[Databasename]</span></p>
-    <h4 style="border-top-style: solid">Table Overview:</h4>
+<div class="database_panel">
+    <div class="flex-container">
+        <p >Servername: <strong><span th:text="${serverName}">[Servername]</span></strong></p>
+        <p>Databasename: <strong><span th:text="${databaseName}">[Databasename]</span></strong></p>
+        <div class="buttons">
+            <button>Create Table</button>
+            <button>Overview</button>
+        </div>
+    </div>
+
+
+    <div>
+        <h4>Table Overview:</h4>
+    </div>
 </div>
 
 </body>

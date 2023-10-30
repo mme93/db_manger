@@ -1,0 +1,17 @@
+.database_panel{
+
+
+}
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.flex-container p {
+    margin-right: 5px;
+}
+
+.buttons {
+    margin-left: auto;
+}
+
