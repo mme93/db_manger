@@ -11,8 +11,8 @@
     <h1 class="page_title" th:text="${tableView.tableName}">[tableView.tableName]</h1>
 </div>
 
-<div>
-    <table style="width: 100%; border-style: solid">
+<div class="table-overview">
+    <table>
         <tr>
             <th th:each="tableColumn : ${tableView.tableColumns}">
                 <span th:text="${tableColumn.columnName}"></span>
@@ -23,13 +23,14 @@
                 <span th:text="${tableMetaColumn.value}"></span>
             </td>
         </tr>
-        <button onclick="openTable()">Click</button>
     </table>
 </div>
+
 <script type="text/javascript" th:inline="javascript">
     function openTable() {
         console.log([[${tableView}]])
     }
 </script>
+
 </body>
 </html>

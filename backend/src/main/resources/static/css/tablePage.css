@@ -1,0 +1,18 @@
+.table-overview {
+    margin-top: 5vh;
+    width: 100%;
+}
+
+.table-overview table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #FFA500;
+}
+
+.table-overview td {
+    border: 1px solid #FFA500;
+}
+
+.table-overview th {
+    border: 1px solid #FFA500;
+}
