@@ -6,12 +6,10 @@ import mamei.backend.datenbank.mariadb.html.service.OverviewPageService;
 import mamei.backend.datenbank.mariadb.db.service.TableService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/web")
@@ -25,10 +23,10 @@ public class WebPageController {
         this.tableService = tableService;
     }
 
-    @GetMapping("/table/{tableName}")
-    public String getTableContext(Model model, @PathVariable String tableName) {
+    @GetMapping("/table/{serverName}/{databaseName}/{tableName}")
+    public String getTableContext(Model model, @PathVariable String databaseName, @PathVariable String serverName, @PathVariable String tableName) throws SQLException {
         model.addAttribute("tableName", tableName);
-        tableService.getTableContext();
+        tableService.getTableContext(new DatabaseServer(serverName, databaseName, tableName));
         return "html/tablePage";
     }
 
@@ -40,11 +38,9 @@ public class WebPageController {
 
     @GetMapping("/tables/{serverName}/{databaseName}")
     public String getDatabaseOverview(@PathVariable String databaseName, @PathVariable String serverName, Model model) throws SQLException {
-
         model.addAttribute("serverName", serverName);
         model.addAttribute("databaseName", databaseName);
-        model.addAttribute("tableNames", tableService.getTableNamesFromDatabase(new DatabaseServer(serverName,databaseName,null)));
-
+        model.addAttribute("tableNames", tableService.getTableNamesFromDatabase(new DatabaseServer(serverName, databaseName, null)));
         return "html/tableOverviewPage";
     }
 

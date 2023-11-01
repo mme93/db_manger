@@ -1,6 +1,10 @@
 package mamei.backend.datenbank.mariadb.db.service;
 
 import mamei.backend.datenbank.mariadb.db.model.DatabaseServer;
+import mamei.backend.datenbank.mariadb.db.model.table.TableColumn;
+import mamei.backend.datenbank.mariadb.db.model.table.TableMetaColumn;
+import mamei.backend.datenbank.mariadb.db.model.table.TableObject;
+import mamei.backend.datenbank.mariadb.db.model.table.TableView;
 import mamei.backend.datenbank.mariadb.db.util.sqlgenerator.TableQueryGenerator;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +26,30 @@ public class TableService {
         this.tableQueryGenerator = tableQueryGenerator;
     }
 
-    public void getTableContext(){
+    public void getTableContext(DatabaseServer databaseServer) throws SQLException {
+        TableView tableView = new TableView();
+        tableView.setTableName(databaseServer.getTableName());
+        Connection connection = this.connectionService.createConnection(databaseServer.getServerName(), databaseServer.getDatabaseName());
+        TableObject tableObject = new TableObject()
+                .builder()
+                .whitDatabaseServer(databaseServer)
+                .whitConnection(connection)
+                .loadTableHeaderContext()
+                .loadTableMetaContext()
+                .withTableSize()
+                .closeConnection();
+
+
 
     }
+
     public List<String> getTableNamesFromDatabase(DatabaseServer databaseServer) throws SQLException {
-        List<String>tableNames= new ArrayList<>();
-        Connection connection = this.connectionService.createConnection(databaseServer.getServerName(),databaseServer.getDatabaseName());
+        List<String> tableNames = new ArrayList<>();
+        Connection connection = this.connectionService.createConnection(databaseServer.getServerName(), databaseServer.getDatabaseName());
         String query = tableQueryGenerator.generateQueryAllTableNamesFromDatabase();
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         ResultSet resultSet = preparedStatement.executeQuery();
-        while(resultSet.next()){
+        while (resultSet.next()) {
             String tableName = resultSet.getString(1); // Der Index 1 entspricht dem Tabellennamen
             tableNames.add(tableName);
         }
