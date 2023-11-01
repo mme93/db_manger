@@ -11,7 +11,11 @@
 <div class="page_header">
     <h1 class="page_title" th:text="${title}"></h1>
 </div>
-<table>
+<div style="background-color: #FFA500;color: black; margin-top: 5px">
+    <span >Table Name:</span>
+    <input type="text" style="width: 68%">
+</div>
+<table id="tableId">
     <tr>
         <th>Spaltenname</th>
         <th>Primary Key</th>
@@ -21,7 +25,7 @@
         <th>Extra</th>
         <th>Hinzufügen</th>
     </tr>
-    <tr>
+    <tr id="rowToAdd">
         <td><input type="text" name="columnName"></td>
         <td><input type="checkbox" name="primaryKey"></td>
         <td><input type="checkbox" name="isNullable"></td>
@@ -35,36 +39,61 @@
         </td>
         <td>
             <select name="extra">
+                <option value="">Kein Extra</option>
                 <option value="AUTO_INCREMENT">AUTO_INCREMENT</option>
                 <option value="UNIQUE">UNIQUE</option>
-                <option value="">Kein Extra</option>
             </select>
         </td>
-        <td><input type="button" value="Hinzufügen" onclick="addRow()"></td>
+        <td><input type="button" value="Add" onclick="addRow()" style="width: 100%"></td>
     </tr>
-    <tr id="addData">
 
-    </tr>
 </table>
 <script type="text/javascript" th:inline="javascript">
     function addRow() {
-        var table = document.querySelector("table");
-        var newRow = table.insertRow(table.rows.length - 1);
+        let row = document.getElementById("rowToAdd");
+        let columns = row.querySelectorAll("td");
+        let addDataRow = document.getElementById('tableId');
+        let tr = document.createElement('tr');
+        let values = {};
+        columns.forEach(function (column) {
+            var input = column.querySelector("input, select");
+            if (input) {
+                let td=document.createElement("td");
+                let name = input.name;
+                let object;
+                let value;
+                if (input.type === 'checkbox') {
+                    value = input.checked;
+                    object=document.createElement("span");
+                    object.textContent=value;
+                }else if (input.type === 'button') {
+                    object=document.createElement("button");
+                    object.textContent='Remove';
+                } else {
+                    value = input.value;
+                    object=document.createElement("span");
+                    object.textContent=value;
+                }
+                td.appendChild(object);
+                tr.appendChild(td)
 
-        var cells = [];
-        for (var i = 0; i < 7; i++) {
-            cells[i] = newRow.insertCell(i);
-        }
+                values[name] = value;
 
-        cells[0].innerHTML = '<input type="text" name="columnName">';
-        cells[1].innerHTML = '<input type="checkbox" name="primaryKey">';
-        cells[2].innerHTML = '<input type="checkbox" name="isNullable">';
-        cells[3].innerHTML = '<input type="text" name="defaultValue">';
-        cells[4].innerHTML = '<select name="dataType">...</select>';
-        cells[5].innerHTML = '<select name="extra">...</select>';
-        cells[6].innerHTML = '<input type="button" value="Löschen" onclick="removeRow()">';
+                // Zurücksetzen des Eingabefelds auf seinen Standardwert
+                if (input.type === "text") {
+                    input.value = "";
+                } else if (input.type === "checkbox") {
+                    input.checked = false;
+                } else if (input.tagName === "SELECT") {
+                    input.selectedIndex = 0;
+                }
+            }
+        });
+        addDataRow.appendChild(tr)
+
     }
-    function removeRow(){
+
+    function removeRow() {
 
     }
 </script>
