@@ -16,3 +16,7 @@
 .table-overview th {
     border: 2px solid #FFA500;
 }
+
+.table-overview input {
+    width: 98%;
+}

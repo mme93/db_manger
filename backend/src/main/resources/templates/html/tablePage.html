@@ -7,14 +7,23 @@
     <link th:href="@{/css/main.css}" rel="stylesheet"/>
 </head>
 <body>
-<div class="page_header">
+<div class="page_header" style="width: 100%">
     <h1 class="page_title" th:text="${tableView.tableName}">[tableView.tableName]</h1>
 </div>
 
-<div class="table-overview">
+<div>
+    <button id="editButton" onclick="edit()">Edit</button>
+    <button id="addButton" onclick="edit()">Add</button>
+</div>
+
+<div id="newDataset" style="display: none">
+    <h4>Add new Dataset</h4>
+</div>
+
+<div class="table-overview" id="notEditTable" style="display: block">
     <table>
         <tr>
-            <th th:each="tableColumn : ${tableView.tableColumns}">
+            <th id="columnId" th:each="tableColumn : ${tableView.tableColumns}">
                 <span th:text="${tableColumn.columnName}"></span>
             </th>
         </tr>
@@ -26,10 +35,74 @@
     </table>
 </div>
 
+<div class="table-overview" id="editTable" style="display: none">
+    <table>
+        <tr>
+            <th th:each="tableColumn : ${tableView.tableColumns}">
+                <span th:text="${tableColumn.columnName}"></span>
+            </th>
+        </tr>
+        <tr th:each="tableMetaRow : ${tableView.tableMetaRows}">
+            <td th:each="tableMetaColumn : ${tableMetaRow.tableMetaColumns}">
+                <input th:value="${tableMetaColumn.value}"
+                       th:attr="data-columnInfo=${tableMetaRow.tableMetaColumns[0].value} +'|'+${tableMetaColumn.columnName}"
+                       oninput="updateModel(this)">
+            </td>
+        </tr>
+    </table>
+</div>
+
+
 <script type="text/javascript" th:inline="javascript">
-    function openTable() {
-        console.log([[${tableView}]])
+    let editedValues = [[${tableView}]];
+    let isChange=false;
+    initPage();
+
+
+    function initPage(){
+        const columnSize=editedValues.tableMetaRows.length;
+        document.getElementById('columnId').style.width = (100 / columnSize) + '%';
     }
+
+    function edit() {
+        if (document.getElementById('editButton').textContent === 'Edit') {
+            if(isChange){
+                saveData();
+            }
+            document.getElementById('editButton').textContent = 'Not Edit';
+            document.getElementById('editTable').style.display = 'block';
+            document.getElementById('notEditTable').style.display = 'none';
+        } else {
+            document.getElementById('editButton').textContent = 'Edit';
+            document.getElementById('editTable').style.display = 'none';
+            document.getElementById('notEditTable').style.display = 'block';
+        }
+    }
+    function saveData(){
+
+        isChange=false;
+    }
+
+    function updateModel(inputElement) {
+        const updatedValue = inputElement.value;
+        const columnInfo = inputElement.getAttribute('data-columnInfo').split('|');
+        const searchColumnId=columnInfo[0];
+        const searchColumnName=columnInfo[1];
+
+        for (let i = 0; i < editedValues.tableMetaRows.length; i++) {
+            const resultId=editedValues.tableMetaRows[i].tableMetaColumns[0].value;
+            if(resultId ===searchColumnId){
+                for(let j = 0; j < editedValues.tableMetaRows[i].tableMetaColumns.length; j++){
+                    if(editedValues.tableMetaRows[i].tableMetaColumns[j].columnName === searchColumnName){
+                        editedValues.tableMetaRows[i].tableMetaColumns[j].value=updatedValue;
+                        console.log(editedValues.tableMetaRows[i].tableMetaColumns[j].value);
+                    }
+                }
+            }
+        }
+        isChange=true;
+    }
+
 </script>
 
 </body>

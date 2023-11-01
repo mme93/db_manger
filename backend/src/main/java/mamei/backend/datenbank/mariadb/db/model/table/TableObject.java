@@ -66,17 +66,23 @@ public class TableObject {
         tableMetaRow.setIndex(index);
         List<TableMetaColumn> tableMetaColumns = new ArrayList<>();
         for (TableColumn tableColumn : tableColumns) {
-            if (tableColumn.getColumnType().contains("bigint")) {
+            if (matchColumnType(tableColumn.getColumnType(),Integer.class)) {
                 TableMetaColumn tableMetaColumn = new TableMetaColumn();
                 int result = resultSet.getInt(tableColumn.getColumnName());
                 tableMetaColumn.setColumnName(tableColumn.getColumnName());
                 tableMetaColumn.setValue(String.valueOf(result));
                 tableMetaColumns.add(tableMetaColumn);
-            } else if (tableColumn.getColumnType().contains("varchar")) {
+            } else if (matchColumnType(tableColumn.getColumnType(), String.class)) {
                 TableMetaColumn tableMetaColumn = new TableMetaColumn();
                 String result = resultSet.getString(tableColumn.getColumnName());
                 tableMetaColumn.setColumnName(tableColumn.getColumnName());
                 tableMetaColumn.setValue(result);
+                tableMetaColumns.add(tableMetaColumn);
+            } else if (matchColumnType(tableColumn.getColumnType(), Float.class)) {
+                TableMetaColumn tableMetaColumn = new TableMetaColumn();
+                Float result = resultSet.getFloat(tableColumn.getColumnName());
+                tableMetaColumn.setColumnName(tableColumn.getColumnName());
+                tableMetaColumn.setValue(String.valueOf(result));
                 tableMetaColumns.add(tableMetaColumn);
             } else {
                 throw new SQLException("No column typ found from typ: " + tableColumn.getColumnType());
@@ -84,6 +90,50 @@ public class TableObject {
         }
         tableMetaRow.setTableMetaColumns(tableMetaColumns);
         return tableMetaRow;
+    }
+
+    public boolean matchColumnType(String columnType, Class typeClass){
+        String [] stringTypes={"varchar","text"};
+        String [] intTypes={"bigint"};
+        String [] floatTypes={"decimal"};
+        switch (getTypeClassSimpleName(typeClass)) {
+            case "String":
+                if (containsColumnTypes(columnType, stringTypes)) return true;
+                break;
+            case "Integer":
+                if (containsColumnTypes(columnType, intTypes)) return true;
+                break;
+            case "Float":
+                if (containsColumnTypes(columnType, floatTypes)) return true;
+                break;
+            default:
+                return false;
+        }
+        return false;
+
+       /*
+       if(typeClass == String.class){
+           if (containsColumnTypes(columnType, stringTypes)) return true;
+       }else if(typeClass == Integer.class){
+           if (containsColumnTypes(columnType, intTypes)) return true;
+       }else if(typeClass == Float.class){
+           if (containsColumnTypes(columnType, floatTypes)) return true;
+       }
+        return false;
+
+        */
+    }
+
+    private String getTypeClassSimpleName(Class<?> typeClass) {
+        return typeClass.getSimpleName();
+    }
+    private boolean containsColumnTypes(String columnType, String[] columnTypes) {
+        for (String existType : columnTypes) {
+            if (columnType.contains(existType)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public TableObject loadTableHeaderContext() {
