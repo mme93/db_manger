@@ -43,7 +43,7 @@
         })
 
         loadConfigButton.addEventListener('click', function () {
-            fetch('http://localhost:8998/database/' + select.value + '/names', {method: 'POST'})
+            fetch('http://217.160.26.246:8998/database/' + select.value + '/names', {method: 'POST'})
                 .then(response => response.json())
                 .then(data => {
                     databaseList.innerHTML = '';
@@ -57,7 +57,7 @@
                         const button = document.createElement('button');
                         button.textContent = 'Open';
                         button.addEventListener('click', function () {
-                            window.location.href='http://localhost:8998/web/tables/'+ select.value+'/'+databaseName;
+                            window.location.href='http://217.160.26.246:8998/web/tables/'+ select.value+'/'+databaseName;
                         });
 
                         listItem.appendChild(button);
