@@ -37,9 +37,10 @@
 <script type="text/javascript" th:inline="javascript">
 
     function openTable(tableName) {
+        const serverUrl = /*[[${@environment.getProperty('spring.config.serverUrl')}]]*/ '';
         let serverName = /*[[${serverName}]]*/ 'ServernameFallback';
         let databaseName = /*[[${databaseName}]]*/ 'DatabaseNameFallback';
-        window.location.href = 'http://localhost:8998/web/table/' + serverName + '/' + databaseName + '/' + tableName;
+        window.location.href = serverUrl+'web/table/' + serverName + '/' + databaseName + '/' + tableName;
     }
 
 </script>
