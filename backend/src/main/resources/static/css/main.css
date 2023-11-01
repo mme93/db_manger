@@ -4,6 +4,7 @@
 .page_header{
     border-bottom-style: solid;
     border-bottom-color: #FFA500;
+    width: 100%;
 }
 .page_panel{
     background-color: #f1ac1a;

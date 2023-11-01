@@ -54,6 +54,9 @@ public class TableObject {
                 tableMetaRows.add(generateTableMetaRow(resultSet, index));
                 index++;
             }
+            if (!checkTableHasIdCol()) {
+                createVisualIdCol();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -66,7 +69,7 @@ public class TableObject {
         tableMetaRow.setIndex(index);
         List<TableMetaColumn> tableMetaColumns = new ArrayList<>();
         for (TableColumn tableColumn : tableColumns) {
-            if (matchColumnType(tableColumn.getColumnType(),Integer.class)) {
+            if (matchColumnType(tableColumn.getColumnType(), Integer.class)) {
                 TableMetaColumn tableMetaColumn = new TableMetaColumn();
                 int result = resultSet.getInt(tableColumn.getColumnName());
                 tableMetaColumn.setColumnName(tableColumn.getColumnName());
@@ -92,10 +95,10 @@ public class TableObject {
         return tableMetaRow;
     }
 
-    public boolean matchColumnType(String columnType, Class typeClass){
-        String [] stringTypes={"varchar","text"};
-        String [] intTypes={"bigint"};
-        String [] floatTypes={"decimal"};
+    public boolean matchColumnType(String columnType, Class typeClass) {
+        String[] stringTypes = {"varchar", "text"};
+        String[] intTypes = {"bigint"};
+        String[] floatTypes = {"decimal"};
         switch (getTypeClassSimpleName(typeClass)) {
             case "String":
                 if (containsColumnTypes(columnType, stringTypes)) return true;
@@ -110,23 +113,12 @@ public class TableObject {
                 return false;
         }
         return false;
-
-       /*
-       if(typeClass == String.class){
-           if (containsColumnTypes(columnType, stringTypes)) return true;
-       }else if(typeClass == Integer.class){
-           if (containsColumnTypes(columnType, intTypes)) return true;
-       }else if(typeClass == Float.class){
-           if (containsColumnTypes(columnType, floatTypes)) return true;
-       }
-        return false;
-
-        */
     }
 
     private String getTypeClassSimpleName(Class<?> typeClass) {
         return typeClass.getSimpleName();
     }
+
     private boolean containsColumnTypes(String columnType, String[] columnTypes) {
         for (String existType : columnTypes) {
             if (columnType.contains(existType)) {
@@ -147,6 +139,25 @@ public class TableObject {
             e.printStackTrace();
         }
         return this;
+    }
+
+    private boolean checkTableHasIdCol() {
+        for (TableColumn column : tableColumns) {
+            if (column.getColumnName().equals("id")) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    private void createVisualIdCol() {
+        tableColumns.add(0, new TableColumn("id", "bigInt()", false, null, null, null));
+        int index = 1;
+        for (TableMetaRow tableMetaRow : tableMetaRows) {
+            tableMetaRow.getTableMetaColumns().add(0, new TableMetaColumn("id", String.valueOf(index)));
+            index++;
+        }
     }
 
     private void loadColumnHeader(ResultSet resultSet) throws SQLException {
