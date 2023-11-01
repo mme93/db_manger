@@ -43,5 +43,11 @@ public class WebPageController {
         model.addAttribute("tableNames", tableService.getTableNamesFromDatabase(new DatabaseServer(serverName, databaseName, null)));
         return "html/tableOverviewPage";
     }
-
+    @GetMapping("/createTablePage/{serverName}/{databaseName}")
+    public String getCreateTable(@PathVariable String databaseName, @PathVariable String serverName, Model model) throws SQLException {
+        model.addAttribute("serverName", serverName);
+        model.addAttribute("databaseName", databaseName);
+        model.addAttribute("title", "Create Table in Database: "+databaseName);
+        return "html/createTablePage";
+    }
 }

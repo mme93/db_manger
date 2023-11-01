@@ -51,7 +51,7 @@ public class TableService {
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
-            String tableName = resultSet.getString(1); // Der Index 1 entspricht dem Tabellennamen
+            String tableName = resultSet.getString(1);
             tableNames.add(tableName);
         }
         resultSet.close();

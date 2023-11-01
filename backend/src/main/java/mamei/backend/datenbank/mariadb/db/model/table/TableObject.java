@@ -152,10 +152,11 @@ public class TableObject {
     }
 
     private void createVisualIdCol() {
-        tableColumns.add(0, new TableColumn("id", "bigInt()", false, null, null, null));
+        String colName="vs_id";
+        tableColumns.add(0, new TableColumn(colName, "bigInt()", false, null, null, null));
         int index = 1;
         for (TableMetaRow tableMetaRow : tableMetaRows) {
-            tableMetaRow.getTableMetaColumns().add(0, new TableMetaColumn("id", String.valueOf(index)));
+            tableMetaRow.getTableMetaColumns().add(0, new TableMetaColumn(colName, String.valueOf(index)));
             index++;
         }
     }

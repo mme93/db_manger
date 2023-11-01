@@ -1,0 +1,19 @@
+table{
+    margin-top: 5px;
+    width: 100%;
+    background-color: #FFA500;
+    color: black;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    border: solid #FFA500 3px;
+}
+table th{
+    border: solid black 3px;
+
+}
+table td{
+    border: solid black 3px;
+}
+table button{
+    width: 98%;
+}

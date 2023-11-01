@@ -18,7 +18,7 @@
         <p>Servername: <strong><span th:text="${serverName}">[Servername]</span></strong></p>
         <p>Databasename: <strong><span th:text="${databaseName}">[Databasename]</span></strong></p>
         <div class="buttons">
-            <button>Create Table</button>
+            <button onclick="createTable()">Create Table</button>
             <button>Overview</button>
         </div>
     </div>
@@ -35,7 +35,12 @@
     </div>
 </div>
 <script type="text/javascript" th:inline="javascript">
-
+    function createTable(){
+        const serverUrl = /*[[${@environment.getProperty('spring.config.serverUrl')}]]*/ '';
+        let serverName = /*[[${serverName}]]*/ 'ServernameFallback';
+        let databaseName = /*[[${databaseName}]]*/ 'DatabaseNameFallback';
+        window.location.href = serverUrl+'web/createTablePage/' + serverName + '/' + databaseName;
+    }
     function openTable(tableName) {
         const serverUrl = /*[[${@environment.getProperty('spring.config.serverUrl')}]]*/ '';
         let serverName = /*[[${serverName}]]*/ 'ServernameFallback';

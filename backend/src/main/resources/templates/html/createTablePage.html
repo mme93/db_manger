@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/css/main.css}" rel="stylesheet"/>
+    <link th:href="@{/css/createTablePage.css}" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="page_header">
+    <h1 class="page_title" th:text="${title}"></h1>
+</div>
+<table>
+    <tr>
+        <th>Spaltenname</th>
+        <th>Primary Key</th>
+        <th>Is Nullable</th>
+        <th>Default Wert</th>
+        <th>Datentyp</th>
+        <th>Extra</th>
+        <th>Hinzufügen</th>
+    </tr>
+    <tr>
+        <td><input type="text" name="columnName"></td>
+        <td><input type="checkbox" name="primaryKey"></td>
+        <td><input type="checkbox" name="isNullable"></td>
+        <td><input type="text" name="defaultValue"></td>
+        <td>
+            <select name="dataType">
+                <option value="INT">INT</option>
+                <option value="VARCHAR">VARCHAR</option>
+                <option value="DATE">DATE</option>
+            </select>
+        </td>
+        <td>
+            <select name="extra">
+                <option value="AUTO_INCREMENT">AUTO_INCREMENT</option>
+                <option value="UNIQUE">UNIQUE</option>
+                <option value="">Kein Extra</option>
+            </select>
+        </td>
+        <td><input type="button" value="Hinzufügen" onclick="addRow()"></td>
+    </tr>
+    <tr id="addData">
+
+    </tr>
+</table>
+<script type="text/javascript" th:inline="javascript">
+    function addRow() {
+        var table = document.querySelector("table");
+        var newRow = table.insertRow(table.rows.length - 1);
+
+        var cells = [];
+        for (var i = 0; i < 7; i++) {
+            cells[i] = newRow.insertCell(i);
+        }
+
+        cells[0].innerHTML = '<input type="text" name="columnName">';
+        cells[1].innerHTML = '<input type="checkbox" name="primaryKey">';
+        cells[2].innerHTML = '<input type="checkbox" name="isNullable">';
+        cells[3].innerHTML = '<input type="text" name="defaultValue">';
+        cells[4].innerHTML = '<select name="dataType">...</select>';
+        cells[5].innerHTML = '<select name="extra">...</select>';
+        cells[6].innerHTML = '<input type="button" value="Löschen" onclick="removeRow()">';
+    }
+    function removeRow(){
+
+    }
+</script>
+</body>
+</html>
