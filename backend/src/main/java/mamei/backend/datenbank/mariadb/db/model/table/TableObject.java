@@ -22,7 +22,7 @@ public class TableObject {
 
     private DatabaseServer databaseServer;
     private List<TableColumn> tableColumns = new ArrayList<>();
-    private List<TableMetaColumn> tableMetaColumns = new ArrayList<>();
+    private List<TableMetaRow> tableMetaRows = new ArrayList<>();
     private Connection connection;
     private int tableSize;
 
@@ -41,17 +41,17 @@ public class TableObject {
     }
 
     public TableObject withTableSize() {
-        tableSize=tableColumns.size();
+        tableSize = tableColumns.size();
         return this;
     }
 
     public TableObject loadTableMetaContext() {
-        String query=createTableDataQuery();
+        String query = createTableDataQuery();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             int index = 0;
             while (resultSet.next()) {
-                System.err.println(index);
+                tableMetaRows.add(generateTableMetaRow(resultSet, index));
                 index++;
             }
         } catch (SQLException e) {
@@ -59,6 +59,32 @@ public class TableObject {
         }
 
         return this;
+    }
+
+    private TableMetaRow generateTableMetaRow(ResultSet resultSet, int index) throws SQLException {
+        TableMetaRow tableMetaRow = new TableMetaRow();
+        tableMetaRow.setIndex(index);
+        List<TableMetaColumn> tableMetaColumns = new ArrayList<>();
+        for (TableColumn tableColumn : tableColumns) {
+
+            if (tableColumn.getColumnType().contains("bigint")) {
+                TableMetaColumn tableMetaColumn = new TableMetaColumn();
+                int result = resultSet.getInt(tableColumn.getColumnName());
+                tableMetaColumns.add(tableMetaColumn);
+                tableMetaColumn.setValue(String.valueOf(result));
+                tableMetaColumns.add(tableMetaColumn);
+            } else if (tableColumn.getColumnType().contains("varchar")) {
+                TableMetaColumn tableMetaColumn = new TableMetaColumn();
+                String result = resultSet.getString(tableColumn.getColumnName());
+                tableMetaColumn.setColumnName(tableColumn.getColumnName());
+                tableMetaColumn.setValue(result);
+                tableMetaColumns.add(tableMetaColumn);
+            } else {
+                throw new SQLException("No column typ found from typ: " + tableColumn.getColumnType());
+            }
+        }
+        tableMetaRow.setTableMetaColumns(tableMetaColumns);
+        return tableMetaRow;
     }
 
     public TableObject loadTableHeaderContext() {
@@ -77,9 +103,9 @@ public class TableObject {
     private void loadColumnHeader(ResultSet resultSet) throws SQLException {
         TableColumn tableColumn = new TableColumn();
         for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-            if(i==1){
+            if (i == 1) {
                 tableColumn.setColumnName(resultSet.getString(i));
-            }else if (i == 2) {
+            } else if (i == 2) {
                 tableColumn.setColumnType(resultSet.getString(i));
             } else if (i == 3) {
                 tableColumn.setNullAble(resultSet.getString(i).equals("NO"));

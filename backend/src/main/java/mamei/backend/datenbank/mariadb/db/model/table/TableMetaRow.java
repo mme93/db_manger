@@ -11,14 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TableView {
+public class TableMetaRow {
 
-    private String tableName;
-
-    private int tableSize;
-
-    private List<TableColumn>tableColumns;
-
-    private List<TableMetaRow>tableMetaRows;
-
+    private int index;
+    private List<TableMetaColumn>tableMetaColumns;
 }

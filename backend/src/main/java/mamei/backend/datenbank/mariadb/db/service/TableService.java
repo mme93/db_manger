@@ -26,9 +26,7 @@ public class TableService {
         this.tableQueryGenerator = tableQueryGenerator;
     }
 
-    public void getTableContext(DatabaseServer databaseServer) throws SQLException {
-        TableView tableView = new TableView();
-        tableView.setTableName(databaseServer.getTableName());
+    public TableView getTableContext(DatabaseServer databaseServer) throws SQLException {
         Connection connection = this.connectionService.createConnection(databaseServer.getServerName(), databaseServer.getDatabaseName());
         TableObject tableObject = new TableObject()
                 .builder()
@@ -38,9 +36,12 @@ public class TableService {
                 .loadTableMetaContext()
                 .withTableSize()
                 .closeConnection();
-
-
-
+        TableView tableView = new TableView();
+        tableView.setTableName(tableObject.getDatabaseServer().getTableName());
+        tableView.setTableSize(tableObject.getTableSize());
+        tableView.setTableColumns(tableObject.getTableColumns());
+        tableView.setTableMetaRows(tableObject.getTableMetaRows());
+        return tableView;
     }
 
     public List<String> getTableNamesFromDatabase(DatabaseServer databaseServer) throws SQLException {

@@ -10,5 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TableMetaColumn {
-    private String test;
+    private String columnName;
+    private String value;
 }

@@ -26,7 +26,7 @@ public class WebPageController {
     @GetMapping("/table/{serverName}/{databaseName}/{tableName}")
     public String getTableContext(Model model, @PathVariable String databaseName, @PathVariable String serverName, @PathVariable String tableName) throws SQLException {
         model.addAttribute("tableName", tableName);
-        tableService.getTableContext(new DatabaseServer(serverName, databaseName, tableName));
+        model.addAttribute("tableView",  tableService.getTableContext(new DatabaseServer(serverName, databaseName, tableName)));
         return "html/tablePage";
     }
 
