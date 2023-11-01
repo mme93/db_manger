@@ -8,8 +8,28 @@
 </head>
 <body>
 <div class="page_header">
-    <h1 class="page_title" th:text="${tableName}">[tableName]</h1>
+    <h1 class="page_title" th:text="${tableView.tableName}">[tableView.tableName]</h1>
 </div>
 
+<div>
+    <table style="width: 100%; border-style: solid">
+        <tr>
+            <th th:each="tableColumn : ${tableView.tableColumns}">
+                <span th:text="${tableColumn.columnName}"></span>
+            </th>
+        </tr>
+        <tr th:each="tableMetaRow : ${tableView.tableMetaRows}">
+            <td th:each="tableMetaColumn : ${tableMetaRow.tableMetaColumns}">
+                <span th:text="${tableMetaColumn.value}"></span>
+            </td>
+        </tr>
+        <button onclick="openTable()">Click</button>
+    </table>
+</div>
+<script type="text/javascript" th:inline="javascript">
+    function openTable() {
+        console.log([[${tableView}]])
+    }
+</script>
 </body>
 </html>

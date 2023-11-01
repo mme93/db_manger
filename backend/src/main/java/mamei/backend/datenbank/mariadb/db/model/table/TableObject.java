@@ -66,11 +66,10 @@ public class TableObject {
         tableMetaRow.setIndex(index);
         List<TableMetaColumn> tableMetaColumns = new ArrayList<>();
         for (TableColumn tableColumn : tableColumns) {
-
             if (tableColumn.getColumnType().contains("bigint")) {
                 TableMetaColumn tableMetaColumn = new TableMetaColumn();
                 int result = resultSet.getInt(tableColumn.getColumnName());
-                tableMetaColumns.add(tableMetaColumn);
+                tableMetaColumn.setColumnName(tableColumn.getColumnName());
                 tableMetaColumn.setValue(String.valueOf(result));
                 tableMetaColumns.add(tableMetaColumn);
             } else if (tableColumn.getColumnType().contains("varchar")) {
