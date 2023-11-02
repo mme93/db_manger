@@ -26,6 +26,8 @@ public class TableService {
         this.tableQueryGenerator = tableQueryGenerator;
     }
 
+
+
     public TableView getTableContext(DatabaseServer databaseServer) throws SQLException {
         Connection connection = this.connectionService.createConnection(databaseServer.getServerName(), databaseServer.getDatabaseName());
         TableObject tableObject = new TableObject()

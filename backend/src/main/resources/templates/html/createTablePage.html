@@ -12,22 +12,31 @@
     <h1 class="page_title" th:text="${title}"></h1>
 </div>
 <div style="background-color: #FFA500;color: black; margin-top: 5px">
-    <span >Table Name:</span>
+    <span>Table Name:</span>
     <input type="text" style="width: 68%">
+    <button>Create Table</button>
 </div>
 <table id="tableId">
     <tr>
+        <th>Nr.</th>
         <th>Spaltenname</th>
         <th>Primary Key</th>
         <th>Is Nullable</th>
         <th>Default Wert</th>
         <th>Datentyp</th>
         <th>Extra</th>
-        <th>Hinzufügen</th>
+        <th>Action</th>
     </tr>
     <tr id="rowToAdd">
+        <td><span>0</span></td>
         <td><input type="text" name="columnName"></td>
-        <td><input type="checkbox" name="primaryKey"></td>
+        <td>
+            <select name="primaryKey">
+                <option value="">No Key</option>
+                <option value="PRIMARY">PRIMARY</option>
+            </select>
+        </td>
+        </td>
         <td><input type="checkbox" name="isNullable"></td>
         <td><input type="text" name="defaultValue"></td>
         <td>
@@ -46,33 +55,56 @@
         </td>
         <td><input type="button" value="Add" onclick="addRow()" style="width: 100%"></td>
     </tr>
-
+    <button style="width: 100%" onclick="test()">Test</button>
 </table>
 <script type="text/javascript" th:inline="javascript">
+    const tableColumnsArray = [];
+
+    function test() {
+        console.log(tableColumnsArray)
+    }
+
     function addRow() {
+
+
         let row = document.getElementById("rowToAdd");
         let columns = row.querySelectorAll("td");
         let addDataRow = document.getElementById('tableId');
         let tr = document.createElement('tr');
         let values = {};
+        let metColumn = new TableColumn();
+        let index = 0;
         columns.forEach(function (column) {
-            var input = column.querySelector("input, select");
+
+            let input = column.querySelector("input, select");
             if (input) {
-                let td=document.createElement("td");
+                let td = document.createElement("td");
                 let name = input.name;
                 let object;
                 let value;
                 if (input.type === 'checkbox') {
                     value = input.checked;
-                    object=document.createElement("span");
-                    object.textContent=value;
-                }else if (input.type === 'button') {
-                    object=document.createElement("button");
-                    object.textContent='Remove';
+                    object = document.createElement("span");
+                    object.textContent = value;
+                    metColumn.nullAble = input.checked;
+                } else if (input.type === 'button') {
+                    object = document.createElement("button");
+                    object.textContent = 'Remove';
                 } else {
                     value = input.value;
-                    object=document.createElement("span");
-                    object.textContent=value;
+                    object = document.createElement("span");
+                    object.textContent = value;
+                    if(name === 'columnName'){
+                        metColumn.columnName = value;
+                    }else if(name === 'primaryKey'){
+                        metColumn.columnKey = value;
+                    }else if(name === 'defaultValue'){
+                        metColumn.columnDefault = value;
+                    }else if(name === 'dataType'){
+                        metColumn.columnType = value;
+                    }else if(name === 'extra'){
+                        metColumn.extra = value;
+                    }
                 }
                 td.appendChild(object);
                 tr.appendChild(td)
@@ -87,14 +119,76 @@
                 } else if (input.tagName === "SELECT") {
                     input.selectedIndex = 0;
                 }
-            }
-        });
-        addDataRow.appendChild(tr)
 
+            }
+            index++;
+        });
+        tableColumnsArray.push(metColumn)
+        addDataRow.appendChild(tr)
     }
+
 
     function removeRow() {
 
+    }
+
+    class TableColumn {
+        constructor() {
+            this._columnName = '';
+            this._columnType = '';
+            this._nullAble = false;
+            this._columnKey = '';
+            this._columnDefault = '';
+            this._extra = '';
+        }
+
+        set columnName(value) {
+            this._columnName = value;
+        }
+
+        get columnName() {
+            return this._columnName;
+        }
+
+        set columnType(value) {
+            this._columnType = value;
+        }
+
+        get columnType() {
+            return this._columnType;
+        }
+
+        set nullAble(value) {
+            this._nullAble = value;
+        }
+
+        get nullAble() {
+            return this._nullAble;
+        }
+
+        set columnKey(value) {
+            this._columnKey = value;
+        }
+
+        get columnKey() {
+            return this._columnKey;
+        }
+
+        set columnDefault(value) {
+            this._columnDefault = value;
+        }
+
+        get columnDefault() {
+            return this._columnDefault;
+        }
+
+        set extra(value) {
+            this._extra = value;
+        }
+
+        get extra() {
+            return this._extra;
+        }
     }
 </script>
 </body>
