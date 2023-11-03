@@ -15,6 +15,7 @@
     <span>Table Name:</span>
     <input type="text" style="width: 68%">
     <button>Create Table</button>
+    <button>Validate Table</button>
 </div>
 <table id="tableId">
     <tr>
@@ -59,7 +60,7 @@
 </table>
 <script type="text/javascript" th:inline="javascript">
     const tableColumnsArray = [];
-
+    let number=1;
     function test() {
         console.log(tableColumnsArray)
     }
@@ -71,7 +72,12 @@
         let columns = row.querySelectorAll("td");
         let addDataRow = document.getElementById('tableId');
         let tr = document.createElement('tr');
-        let values = {};
+        let nr=document.createElement("span");
+        let colTd=document.createElement("td");
+        nr.textContent=number.toString();
+        number++;
+        colTd.appendChild(nr)
+        tr.appendChild(colTd)
         let metColumn = new TableColumn();
         let index = 0;
         columns.forEach(function (column) {
@@ -109,9 +115,6 @@
                 td.appendChild(object);
                 tr.appendChild(td)
 
-                values[name] = value;
-
-                // Zurücksetzen des Eingabefelds auf seinen Standardwert
                 if (input.type === "text") {
                     input.value = "";
                 } else if (input.type === "checkbox") {
