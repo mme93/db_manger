@@ -48,7 +48,7 @@
         <td><input type="text" name="columnName" id="columnName"></td>
         <td>
             <select name="primaryKey">
-                <option value="">No Key</option>
+                <option value="No Key">No Key</option>
                 <option value="PRIMARY">PRIMARY</option>
             </select>
         </td>
@@ -73,12 +73,12 @@
     </tr>
 </table>
 <script type="text/javascript" th:inline="javascript">
-    let tableColumnsArray = [];
+    let tableColumnsArray= [];
     let number = 1;
 
-    function validateTable(){
+    function validateTable() {
         const serverUrl = /*[[${@environment.getProperty('spring.config.serverUrl')}]]*/ '';
-        const url=serverUrl+"restTable/validate"
+        const url = serverUrl + "restTable/validate"
         const requestOptions = {
             method: 'POST',
             headers: {
@@ -120,9 +120,10 @@
                 let value;
                 if (input.type === 'checkbox') {
                     value = input.checked;
-                    object = document.createElement("span");
-                    object.textContent = value;
-                    metColumn.nullAble = input.checked;
+                    object = document.createElement("input");
+                    object.type = "checkbox";
+                    object.checked = input.checked;
+                    metColumn.nullAble = value;
                 } else if (input.type === 'button') {
                     object = document.createElement("button");
                     object.textContent = 'Remove';
@@ -131,18 +132,63 @@
                     };
                 } else {
                     value = input.value;
-                    object = document.createElement("span");
-                    object.textContent = value;
                     if (name === 'columnName') {
+                        console.log(value)
+                        object = document.createElement("input");
+                        object.type = "text";
+                        object.textContent = value;
+                        object.value=value;
                         metColumn.columnName = value;
                     } else if (name === 'primaryKey') {
                         metColumn.columnKey = value;
+                        object = document.createElement("select");
+                        let firstOption = document.createElement("option");
+                        firstOption.value="No Key";
+                        firstOption.textContent="No Key";
+                        object.appendChild(firstOption);
+                        let secondOption = document.createElement("option");
+                        secondOption.value="PRIMARY";
+                        secondOption.textContent="PRIMARY";
+                        object.appendChild(secondOption);
+                        object.value=value;
                     } else if (name === 'defaultValue') {
+                        object = document.createElement("input");
+                        object.type = "text";
+                        object.textContent = value;
+                        object.value=value;
                         metColumn.columnDefault = value;
                     } else if (name === 'dataType') {
                         metColumn.columnType = value;
+                        object = document.createElement("select");
+                        let firstOption = document.createElement("option");
+                        firstOption.value="INT";
+                        firstOption.textContent="INT";
+                        object.appendChild(firstOption);
+                        let secondOption = document.createElement("option");
+                        secondOption.value="VARCHAR";
+                        secondOption.textContent="VARCHAR";
+                        object.appendChild(secondOption);
+                        let thirdOption = document.createElement("option");
+                        thirdOption.value="DATE";
+                        thirdOption.textContent="DATE";
+                        object.appendChild(thirdOption);
+                        object.value=value;
                     } else if (name === 'extra') {
                         metColumn.extra = value;
+                        object = document.createElement("select");
+                        let firstOption = document.createElement("option");
+                        firstOption.value="";
+                        firstOption.textContent="Kein Extra";
+                        object.appendChild(firstOption);
+                        let secondOption = document.createElement("option");
+                        secondOption.value="AUTO_INCREMENT";
+                        secondOption.textContent="AUTO_INCREMENT";
+                        object.appendChild(secondOption);
+                        let thirdOption = document.createElement("option");
+                        thirdOption.value="UNIQUE";
+                        thirdOption.textContent="UNIQUE";
+                        object.appendChild(thirdOption);
+                        object.value=value;
                     }
                 }
                 td.appendChild(object);
@@ -179,7 +225,7 @@
         }
     }
 
-    function createTable(){
+    function createTable() {
         alert("Please first validate your Table")
     }
 
@@ -190,12 +236,13 @@
             trRows[i].remove();
         }
         tableColumnsArray = [];
-        document.getElementById("columnName").textContent='';
-        number=1;
+        document.getElementById("columnName").textContent = '';
+        number = 1;
     }
 
     function rebuildTable() {
         number = 1;
+
         for (let i = 0; i < tableColumnsArray.length; i++) {
             let addDataRow = document.getElementById('tableId');
             let tr = document.createElement('tr');
@@ -206,40 +253,80 @@
             colTd.appendChild(nr)
             tr.appendChild(colTd)
             //ColName
-            let colName = document.createElement("span");
+            let colName = document.createElement("input");
+            colName.type = "text";
             let colNameTd = document.createElement("td");
             colName.textContent = tableColumnsArray[i].columnName;
+            colName.value = tableColumnsArray[i].columnName;
             colNameTd.appendChild(colName);
             tr.appendChild(colNameTd);
             //Key
-            let keyName = document.createElement("span");
+            let keyName = document.createElement("select");
+            let firstOption = document.createElement("option");
+            firstOption.value = "No Key";
+            firstOption.textContent = "No Key";
+            keyName.appendChild(firstOption);
+            let secondOption = document.createElement("option");
+            secondOption.value = "PRIMARY";
+            secondOption.textContent = "PRIMARY";
+            keyName.appendChild(secondOption);
             let keyNameTd = document.createElement("td");
-            keyName.textContent = tableColumnsArray[i].columnKey;
+            keyName.value = tableColumnsArray[i].columnKey;
             keyNameTd.appendChild(keyName);
+            keyNameTd.addEventListener("change", function () {
+                changeValue(keyName.value)
+            })
             tr.appendChild(keyNameTd);
             //IsNullable
-            let isNullAble = document.createElement("span");
+            let isNullAble = document.createElement("input");
             let isNullAbleTd = document.createElement("td");
-            isNullAble.textContent = tableColumnsArray[i].nullAble;
+            isNullAble.type = "checkbox";
+            isNullAble.checked = tableColumnsArray[i].nullAble;
             isNullAbleTd.appendChild(isNullAble);
             tr.appendChild(isNullAbleTd);
             //Default Wert
-            let defaultValue = document.createElement("span");
+            let defaultValue = document.createElement("input");
+            defaultValue.type = "text"
             let defaultValueTd = document.createElement("td");
-            defaultValue.textContent = tableColumnsArray[i].defaultValue;
+            defaultValue.textContent = tableColumnsArray[i].columnDefault;
+            defaultValue.value = tableColumnsArray[i].columnDefault;
             defaultValueTd.appendChild(defaultValue);
             tr.appendChild(defaultValueTd);
             //DataType
-            let dataType = document.createElement("span");
+            let dataType = document.createElement("select");
             let dataTypeTd = document.createElement("td");
-            dataType.textContent = tableColumnsArray[i].dataType;
+            firstOption = document.createElement("option");
+            firstOption.value = "INT";
+            firstOption.textContent = "INT";
+            dataType.appendChild(firstOption);
+            secondOption = document.createElement("option");
+            secondOption.value = "VARCHAR";
+            secondOption.textContent = "VARCHAR";
+            dataType.appendChild(secondOption);
+            let thirdOption = document.createElement("option");
+            thirdOption.value = "DATE";
+            thirdOption.textContent = "DATE";
+            dataType.appendChild(thirdOption);
+            dataType.value = tableColumnsArray[i].columnType;
             dataTypeTd.appendChild(dataType);
             tr.appendChild(dataTypeTd);
             //Extra
-            let extra = document.createElement("span");
+            let extra = document.createElement("select");
             let extraTd = document.createElement("td");
             extra.textContent = tableColumnsArray[i].extra;
+            firstOption = document.createElement("option");
+            firstOption.value = "";
+            firstOption.textContent = "Kein Extra";
+            extra.appendChild(firstOption);
+            secondOption = document.createElement("option");
+            secondOption.value = "AUTO_INCREMENT";
+            secondOption.textContent = "AUTO_INCREMENT";
+            extra.appendChild(secondOption);
+            thirdOption = document.createElement("option");
+            thirdOption.value = "UNIQUE";
+            thirdOption.textContent = "UNIQUE";
             extraTd.appendChild(extra);
+            extra.value = tableColumnsArray[i].extra;
             tr.appendChild(extraTd);
             //Button
             let removeButtonTd = document.createElement("td");
@@ -254,7 +341,9 @@
             number++;
         }
     }
-
+    function changeValue(obj){
+        console.log(obj)
+    }
     class TableColumn {
         constructor() {
             this._columnName = '';
