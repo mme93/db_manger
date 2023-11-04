@@ -1,8 +1,7 @@
 package mamei.backend.datenbank.mariadb.db.controller;
 
 import mamei.backend.datenbank.mariadb.db.model.table.TableColumn;
-import mamei.backend.datenbank.mariadb.db.model.table.TableMetaColumn;
-import mamei.backend.datenbank.mariadb.db.model.table.TableMetaRow;
+import mamei.backend.datenbank.mariadb.db.service.TableService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +14,12 @@ import java.util.List;
 @RestController
 @RequestMapping("restTable")
 public class TableController {
+
+    private final TableService tableService;
+
+    public TableController(TableService tableService) {
+        this.tableService = tableService;
+    }
 
     @PostMapping("/validate")
     public ResponseEntity<String> validateTable(@RequestBody List<TableColumn>tableMetaColumnList){

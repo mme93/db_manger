@@ -1,11 +1,10 @@
 package mamei.backend.datenbank.mariadb.db.service;
 
 import mamei.backend.datenbank.mariadb.db.model.DatabaseServer;
-import mamei.backend.datenbank.mariadb.db.model.table.TableColumn;
-import mamei.backend.datenbank.mariadb.db.model.table.TableMetaColumn;
 import mamei.backend.datenbank.mariadb.db.model.table.TableObject;
 import mamei.backend.datenbank.mariadb.db.model.table.TableView;
 import mamei.backend.datenbank.mariadb.db.util.sqlgenerator.TableQueryGenerator;
+import mamei.backend.datenbank.mariadb.db.util.validator.TableValidator;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -20,10 +19,12 @@ public class TableService {
 
     private final DatabaseConnectionService connectionService;
     private final TableQueryGenerator tableQueryGenerator;
+    private final TableValidator tableValidator;
 
-    public TableService(DatabaseConnectionService connectionService, TableQueryGenerator tableQueryGenerator) {
+    public TableService(DatabaseConnectionService connectionService, TableQueryGenerator tableQueryGenerator, TableValidator tableValidator) {
         this.connectionService = connectionService;
         this.tableQueryGenerator = tableQueryGenerator;
+        this.tableValidator = tableValidator;
     }
 
     public TableView getTableContext(DatabaseServer databaseServer) throws SQLException {
@@ -81,5 +82,8 @@ public class TableService {
         }
 
     }
-
+    public boolean isTableValid(){
+        tableValidator.isTableValid();
+        return true;
+    }
 }
