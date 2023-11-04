@@ -14,8 +14,9 @@
 <div style="background-color: #FFA500;color: black; margin-top: 5px">
     <span>Table Name:</span>
     <input type="text" style="width: 68%">
-    <button>Create Table</button>
+    <button onclick="test()">Create Table</button>
     <button>Validate Table</button>
+    <button onclick="resetTable()">Reset Table</button>
 </div>
 <table id="tableId">
     <tr>
@@ -56,10 +57,9 @@
         </td>
         <td><input type="button" value="Add" onclick="addRow()" style="width: 100%"></td>
     </tr>
-    <button style="width: 100%" onclick="test()">Test</button>
 </table>
 <script type="text/javascript" th:inline="javascript">
-    const tableColumnsArray = [];
+    let tableColumnsArray = [];
     let number = 1;
 
     function test() {
@@ -148,53 +148,60 @@
         }
     }
 
+    function resetTable() {
+        const table = document.getElementById('tableId');
+        const trRows = table.querySelectorAll('tr');
+        for (let i = 2; i < trRows.length; i++) {
+            trRows[i].remove();
+        }
+        tableColumnsArray = [];
+    }
+
     function rebuildTable() {
         number = 1;
-        console.log(tableColumnsArray)
         for (let i = 0; i < tableColumnsArray.length; i++) {
-            let row = document.getElementById("rowToAdd");
-            let columns = row.querySelectorAll("td");
             let addDataRow = document.getElementById('tableId');
             let tr = document.createElement('tr');
+            //Nr
             let nr = document.createElement("span");
             let colTd = document.createElement("td");
             nr.textContent = number.toString();
             colTd.appendChild(nr)
             tr.appendChild(colTd)
             //ColName
-            let colName=document.createElement("span");
+            let colName = document.createElement("span");
             let colNameTd = document.createElement("td");
-            colName.textContent=tableColumnsArray[i].columnName;
+            colName.textContent = tableColumnsArray[i].columnName;
             colNameTd.appendChild(colName);
             tr.appendChild(colNameTd);
             //Key
-            let keyName=document.createElement("span");
+            let keyName = document.createElement("span");
             let keyNameTd = document.createElement("td");
-            keyName.textContent=tableColumnsArray[i].columnKey;
+            keyName.textContent = tableColumnsArray[i].columnKey;
             keyNameTd.appendChild(keyName);
             tr.appendChild(keyNameTd);
             //IsNullable
-            let isNullAble=document.createElement("span");
+            let isNullAble = document.createElement("span");
             let isNullAbleTd = document.createElement("td");
-            isNullAble.textContent=tableColumnsArray[i].nullAble;
+            isNullAble.textContent = tableColumnsArray[i].nullAble;
             isNullAbleTd.appendChild(isNullAble);
             tr.appendChild(isNullAbleTd);
             //Default Wert
-            let defaultValue=document.createElement("span");
+            let defaultValue = document.createElement("span");
             let defaultValueTd = document.createElement("td");
-            defaultValue.textContent=tableColumnsArray[i].nullAble;
+            defaultValue.textContent = tableColumnsArray[i].defaultValue;
             defaultValueTd.appendChild(defaultValue);
             tr.appendChild(defaultValueTd);
             //DataType
-            let dataType=document.createElement("span");
+            let dataType = document.createElement("span");
             let dataTypeTd = document.createElement("td");
-            dataType.textContent=tableColumnsArray[i].nullAble;
+            dataType.textContent = tableColumnsArray[i].dataType;
             dataTypeTd.appendChild(dataType);
             tr.appendChild(dataTypeTd);
             //Extra
-            let extra=document.createElement("span");
+            let extra = document.createElement("span");
             let extraTd = document.createElement("td");
-            extra.textContent=tableColumnsArray[i].nullAble;
+            extra.textContent = tableColumnsArray[i].extra;
             extraTd.appendChild(extra);
             tr.appendChild(extraTd);
             //Button
