@@ -29,7 +29,7 @@
         <th>Action</th>
     </tr>
     <tr id="rowToAdd">
-        <td><span>0</span></td>
+        <td style="visibility: hidden"><span>0</span></td>
         <td><input type="text" name="columnName"></td>
         <td>
             <select name="primaryKey">
@@ -60,21 +60,20 @@
 </table>
 <script type="text/javascript" th:inline="javascript">
     const tableColumnsArray = [];
-    let number=1;
+    let number = 1;
+
     function test() {
         console.log(tableColumnsArray)
     }
 
     function addRow() {
-
-
         let row = document.getElementById("rowToAdd");
         let columns = row.querySelectorAll("td");
         let addDataRow = document.getElementById('tableId');
         let tr = document.createElement('tr');
-        let nr=document.createElement("span");
-        let colTd=document.createElement("td");
-        nr.textContent=number.toString();
+        let nr = document.createElement("span");
+        let colTd = document.createElement("td");
+        nr.textContent = number.toString();
         number++;
         colTd.appendChild(nr)
         tr.appendChild(colTd)
@@ -96,19 +95,22 @@
                 } else if (input.type === 'button') {
                     object = document.createElement("button");
                     object.textContent = 'Remove';
+                    object.onclick = function () {
+                        removeRowFromTable(nr.textContent);
+                    };
                 } else {
                     value = input.value;
                     object = document.createElement("span");
                     object.textContent = value;
-                    if(name === 'columnName'){
+                    if (name === 'columnName') {
                         metColumn.columnName = value;
-                    }else if(name === 'primaryKey'){
+                    } else if (name === 'primaryKey') {
                         metColumn.columnKey = value;
-                    }else if(name === 'defaultValue'){
+                    } else if (name === 'defaultValue') {
                         metColumn.columnDefault = value;
-                    }else if(name === 'dataType'){
+                    } else if (name === 'dataType') {
                         metColumn.columnType = value;
-                    }else if(name === 'extra'){
+                    } else if (name === 'extra') {
                         metColumn.extra = value;
                     }
                 }
@@ -131,8 +133,82 @@
     }
 
 
-    function removeRow() {
+    function removeRowFromTable(number) {
+        tableColumnsArray.splice(number - 1, 1);
+        clear();
+        rebuildTable();
+    }
 
+
+    function clear() {
+        const table = document.getElementById('tableId');
+        const trRows = table.querySelectorAll('tr');
+        for (let i = 2; i < trRows.length; i++) {
+            trRows[i].remove();
+        }
+    }
+
+    function rebuildTable() {
+        number = 1;
+        console.log(tableColumnsArray)
+        for (let i = 0; i < tableColumnsArray.length; i++) {
+            let row = document.getElementById("rowToAdd");
+            let columns = row.querySelectorAll("td");
+            let addDataRow = document.getElementById('tableId');
+            let tr = document.createElement('tr');
+            let nr = document.createElement("span");
+            let colTd = document.createElement("td");
+            nr.textContent = number.toString();
+            colTd.appendChild(nr)
+            tr.appendChild(colTd)
+            //ColName
+            let colName=document.createElement("span");
+            let colNameTd = document.createElement("td");
+            colName.textContent=tableColumnsArray[i].columnName;
+            colNameTd.appendChild(colName);
+            tr.appendChild(colNameTd);
+            //Key
+            let keyName=document.createElement("span");
+            let keyNameTd = document.createElement("td");
+            keyName.textContent=tableColumnsArray[i].columnKey;
+            keyNameTd.appendChild(keyName);
+            tr.appendChild(keyNameTd);
+            //IsNullable
+            let isNullAble=document.createElement("span");
+            let isNullAbleTd = document.createElement("td");
+            isNullAble.textContent=tableColumnsArray[i].nullAble;
+            isNullAbleTd.appendChild(isNullAble);
+            tr.appendChild(isNullAbleTd);
+            //Default Wert
+            let defaultValue=document.createElement("span");
+            let defaultValueTd = document.createElement("td");
+            defaultValue.textContent=tableColumnsArray[i].nullAble;
+            defaultValueTd.appendChild(defaultValue);
+            tr.appendChild(defaultValueTd);
+            //DataType
+            let dataType=document.createElement("span");
+            let dataTypeTd = document.createElement("td");
+            dataType.textContent=tableColumnsArray[i].nullAble;
+            dataTypeTd.appendChild(dataType);
+            tr.appendChild(dataTypeTd);
+            //Extra
+            let extra=document.createElement("span");
+            let extraTd = document.createElement("td");
+            extra.textContent=tableColumnsArray[i].nullAble;
+            extraTd.appendChild(extra);
+            tr.appendChild(extraTd);
+            //Button
+            let removeButtonTd = document.createElement("td");
+            let removeButton = document.createElement("button");
+            removeButton.textContent = 'Remove';
+            removeButton.onclick = function () {
+                removeRowFromTable(nr.textContent);
+            };
+            removeButtonTd.appendChild(removeButton);
+            tr.appendChild(removeButtonTd);
+            addDataRow.appendChild(tr)
+            number++;
+        }
     }
 
     class TableColumn {
