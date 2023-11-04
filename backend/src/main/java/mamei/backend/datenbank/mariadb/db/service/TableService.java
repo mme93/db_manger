@@ -4,6 +4,7 @@ import mamei.backend.datenbank.mariadb.db.model.DatabaseServer;
 import mamei.backend.datenbank.mariadb.db.model.report.TableCreateReport;
 import mamei.backend.datenbank.mariadb.db.model.table.TableObject;
 import mamei.backend.datenbank.mariadb.db.model.table.TableView;
+import mamei.backend.datenbank.mariadb.db.util.reportgenerator.CreateTableReportGenerator;
 import mamei.backend.datenbank.mariadb.db.util.sqlgenerator.TableQueryGenerator;
 import mamei.backend.datenbank.mariadb.db.util.validator.TableValidator;
 import org.springframework.stereotype.Service;
@@ -21,11 +22,13 @@ public class TableService {
     private final DatabaseConnectionService connectionService;
     private final TableQueryGenerator tableQueryGenerator;
     private final TableValidator tableValidator;
+    private final CreateTableReportGenerator createTableReportGenerator;
 
-    public TableService(DatabaseConnectionService connectionService, TableQueryGenerator tableQueryGenerator, TableValidator tableValidator) {
+    public TableService(DatabaseConnectionService connectionService, TableQueryGenerator tableQueryGenerator, TableValidator tableValidator, CreateTableReportGenerator createTableReportGenerator) {
         this.connectionService = connectionService;
         this.tableQueryGenerator = tableQueryGenerator;
         this.tableValidator = tableValidator;
+        this.createTableReportGenerator = createTableReportGenerator;
     }
 
     public TableView getTableContext(DatabaseServer databaseServer) throws SQLException {
@@ -83,10 +86,13 @@ public class TableService {
         }
 
     }
-    public TableCreateReport validateCreatTable(){
-       if(!tableValidator.isCreateTableValid()){
-           return tableValidator.generateCreateTableReport();
-       }
-        return null;
+
+    public TableCreateReport validateCreatTable() {
+        if (!tableValidator.isCreateTableValid()) {
+            return createTableReportGenerator.generateCreateTableReport();
+        }
+        TableCreateReport report = new TableCreateReport();
+        report.setValid(true);
+        return report;
     }
 }
