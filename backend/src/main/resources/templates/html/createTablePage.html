@@ -5,19 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link th:href="@{/css/main.css}" rel="stylesheet"/>
     <link th:href="@{/css/createTablePage.css}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 <body>
 
 <div class="page_header">
     <h1 class="page_title" th:text="${title}"></h1>
 </div>
-<div style="background-color: #FFA500;color: black; margin-top: 5px">
+<div class="container">
     <span>Table Name:</span>
     <input type="text" style="width: 68%">
-    <button onclick="test()">Create Table</button>
-    <button>Validate Table</button>
-    <button onclick="resetTable()">Reset Table</button>
+    <button id="button1" onclick="test()">
+        <i class="fas fa-check"></i>
+    </button>
+    <button id="button2" onclick="test()">
+        <i class="fas fa-pencil-alt"></i>
+    </button>
+    <button id="button3" onclick="resetTable()">
+        <i class="fas fa-trash"></i>
+    </button>
 </div>
+
+<div class="button-container">
+
+</div>
+
+
 <table id="tableId">
     <tr>
         <th>Nr.</th>

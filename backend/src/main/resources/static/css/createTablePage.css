@@ -18,4 +18,24 @@ table button{
     width: 98%;
 }
 
+.container {
+    background-color: #FFA500;
+    color: black;
+    margin-top: 5px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 5px;
+}
 
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 1px;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 5px;
+}
