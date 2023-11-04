@@ -1,6 +1,7 @@
 package mamei.backend.datenbank.mariadb.db.service;
 
 import mamei.backend.datenbank.mariadb.db.model.DatabaseServer;
+import mamei.backend.datenbank.mariadb.db.model.report.TableCreateReport;
 import mamei.backend.datenbank.mariadb.db.model.table.TableObject;
 import mamei.backend.datenbank.mariadb.db.model.table.TableView;
 import mamei.backend.datenbank.mariadb.db.util.sqlgenerator.TableQueryGenerator;
@@ -82,8 +83,10 @@ public class TableService {
         }
 
     }
-    public boolean isTableValid(){
-        tableValidator.isTableValid();
-        return true;
+    public TableCreateReport validateCreatTable(){
+       if(!tableValidator.isCreateTableValid()){
+           return tableValidator.generateCreateTableReport();
+       }
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package mamei.backend.datenbank.mariadb.db.controller;
 
+import mamei.backend.datenbank.mariadb.db.model.report.TableCreateReport;
 import mamei.backend.datenbank.mariadb.db.model.table.TableColumn;
 import mamei.backend.datenbank.mariadb.db.service.TableService;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,13 @@ public class TableController {
     }
 
     @PostMapping("/validate")
-    public ResponseEntity<String> validateTable(@RequestBody List<TableColumn>tableMetaColumnList){
-        System.out.println(tableMetaColumnList.size());
-        return new ResponseEntity<>("Validate", HttpStatus.OK);
+    public ResponseEntity<TableCreateReport> validateTable(@RequestBody List<TableColumn>tableMetaColumnList){
+        TableCreateReport report = tableService.validateCreatTable();
+        if (report.isValid()) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(report, HttpStatus.CONFLICT);
+        }
     }
 
 }
