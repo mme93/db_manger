@@ -16,13 +16,13 @@
 <div class="container">
     <span>Table Name:</span>
     <input type="text" style="width: 68%">
-    <button id="button1" onclick="test()">
-        <i class="fas fa-check"></i>
+    <button id="button1" onclick="validateTable()" class="icon_button">
+        <i class="fas fa-check" style="color: green"></i>
     </button>
-    <button id="button2" onclick="test()">
-        <i class="fas fa-pencil-alt"></i>
+    <button id="button2" onclick="createTable()" class="icon_button">
+        <i class="fas fa-floppy-disk"></i>
     </button>
-    <button id="button3" onclick="resetTable()">
+    <button id="button3" onclick="resetTable()" class="icon_button">
         <i class="fas fa-trash"></i>
     </button>
 </div>
@@ -45,7 +45,7 @@
     </tr>
     <tr id="rowToAdd">
         <td style="visibility: hidden"><span>0</span></td>
-        <td><input type="text" name="columnName"></td>
+        <td><input type="text" name="columnName" id="columnName"></td>
         <td>
             <select name="primaryKey">
                 <option value="">No Key</option>
@@ -76,8 +76,25 @@
     let tableColumnsArray = [];
     let number = 1;
 
-    function test() {
-        console.log(tableColumnsArray)
+    function validateTable(){
+        const serverUrl = /*[[${@environment.getProperty('spring.config.serverUrl')}]]*/ '';
+        const url=serverUrl+"restTable/validate"
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(tableColumnsArray)
+        };
+        console.log(requestOptions.body.toString())
+        fetch(url, requestOptions)
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Fehler bei der POST-Anfrage:', error);
+            });
     }
 
     function addRow() {
@@ -162,6 +179,10 @@
         }
     }
 
+    function createTable(){
+        alert("Please first validate your Table")
+    }
+
     function resetTable() {
         const table = document.getElementById('tableId');
         const trRows = table.querySelectorAll('tr');
@@ -169,6 +190,8 @@
             trRows[i].remove();
         }
         tableColumnsArray = [];
+        document.getElementById("columnName").textContent='';
+        number=1;
     }
 
     function rebuildTable() {
