@@ -24,7 +24,7 @@ public class TableController {
 
     @PostMapping("/validate")
     public ResponseEntity<TableCreateReport> validateTable(@RequestBody List<TableColumn>tableMetaColumnList){
-        TableCreateReport report = tableService.validateCreatTable();
+        TableCreateReport report = tableService.validateCreatTable(tableMetaColumnList);
         if (report.isValid()) {
             return new ResponseEntity<>(HttpStatus.OK);
         }else{
