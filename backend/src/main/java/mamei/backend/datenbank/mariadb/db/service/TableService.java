@@ -88,12 +88,7 @@ public class TableService {
 
     }
 
-    public TableCreateReport validateCreatTable(List<TableColumn> tableMetaColumnList) {
-        if (!tableValidator.isCreateTableValid(tableMetaColumnList)) {
-            return createTableReportGenerator.generateCreateTableReport();
-        }
-        TableCreateReport report = new TableCreateReport();
-        report.setValid(true);
-        return report;
+    public TableCreateReport validateCreatTable(List<TableColumn> tableMetaColumnList,String tableName) {
+        return tableValidator.isCreateTableValid(tableMetaColumnList,tableName);
     }
 }

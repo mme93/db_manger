@@ -14,7 +14,7 @@
 </div>
 <div class="container">
     <span>Table Name:</span>
-    <input type="text" style="width: 68%">
+    <input type="text" style="width: 68%" id="tableNameInput">
     <button id="button1" onclick="validateTable()" class="icon_button">
         <i class="fas fa-check" style="color: green"></i>
     </button>
@@ -78,12 +78,25 @@
     function validateTable() {
         const serverUrl = /*[[${@environment.getProperty('spring.config.serverUrl')}]]*/ '';
         const url = serverUrl + "restTable/validate"
+        let tableNameInputEle=document.getElementById("tableNameInput");
+        const databaseServer = {
+            serverName: /*[[${serverName}]]*/ 'ServernameFallback',
+            databaseName: /*[[${databaseName}]]*/ 'DatabaseNameFallback',
+            tableName: tableNameInputEle.value
+        };
+
+        const anfrage = {
+            databaseServer: databaseServer,
+            tableMetaColumnList: tableColumnsArray
+        }
+
         const requestOptions = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(tableColumnsArray)
+            body: JSON.stringify(anfrage)
+            //body: JSON.stringify(tableColumnsArray)
         };
         console.log(requestOptions.body.toString())
         fetch(url, requestOptions)
@@ -390,6 +403,8 @@
             tableColumnsArray[index].extra=value;
         }
     }
+
+
     class TableColumn {
         constructor() {
             this._columnName = '';
