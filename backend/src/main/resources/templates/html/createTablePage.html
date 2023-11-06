@@ -76,6 +76,7 @@
     let number = 1;
 
     function validateTable() {
+
         const serverUrl = /*[[${@environment.getProperty('spring.config.serverUrl')}]]*/ '';
         const url = serverUrl + "restTable/validate"
         let tableNameInputEle=document.getElementById("tableNameInput");
@@ -98,15 +99,27 @@
             body: JSON.stringify(anfrage)
             //body: JSON.stringify(tableColumnsArray)
         };
-        console.log(requestOptions.body.toString())
+
         fetch(url, requestOptions)
-            .then(response => response.text())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
-                console.log(data);
+                analyzeReport(data)
             })
             .catch(error => {
                 console.error('Fehler bei der POST-Anfrage:', error);
             });
+    }
+
+    function analyzeReport(data){
+        console.log(data.tableMetaColumnList);
+        console.log(data.keyReport +" | "+data.keyValid);
+       // console.log(data.tableName+" | "+data.tableNameReport+" | "+data.tableNameValid);
+        console.log("TableValid: "+data.tableValid +" | Valid:"+data.valid);
     }
 
     function addRow() {
@@ -406,62 +419,12 @@
 
 
     class TableColumn {
-        constructor() {
-            this._columnName = '';
-            this._columnType = '';
-            this._nullAble = false;
-            this._columnKey = '';
-            this._columnDefault = '';
-            this._extra = '';
-        }
-
-        set columnName(value) {
-            this._columnName = value;
-        }
-
-        get columnName() {
-            return this._columnName;
-        }
-
-        set columnType(value) {
-            this._columnType = value;
-        }
-
-        get columnType() {
-            return this._columnType;
-        }
-
-        set nullAble(value) {
-            this._nullAble = value;
-        }
-
-        get nullAble() {
-            return this._nullAble;
-        }
-
-        set columnKey(value) {
-            this._columnKey = value;
-        }
-
-        get columnKey() {
-            return this._columnKey;
-        }
-
-        set columnDefault(value) {
-            this._columnDefault = value;
-        }
-
-        get columnDefault() {
-            return this._columnDefault;
-        }
-
-        set extra(value) {
-            this._extra = value;
-        }
-
-        get extra() {
-            return this._extra;
-        }
+        columnName = '';
+        columnType = '';
+        nullAble = false;
+        columnKey = '';
+        columnDefault = '';
+        extra = '';
     }
 </script>
 </body>

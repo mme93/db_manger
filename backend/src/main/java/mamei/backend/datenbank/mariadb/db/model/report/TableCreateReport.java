@@ -15,6 +15,8 @@ public class TableCreateReport {
     //Checks
     private boolean isTableNameValid;
     private boolean isTableValid;
+    private boolean isKeyValid;
     //Report
     private String tableNameReport;
+    private String keyReport;
 }
