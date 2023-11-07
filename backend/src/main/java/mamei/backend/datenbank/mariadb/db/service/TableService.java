@@ -11,10 +11,7 @@ import mamei.backend.datenbank.mariadb.db.util.sqlgenerator.TableQueryGenerator;
 import mamei.backend.datenbank.mariadb.db.util.validator.TableValidator;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,5 +88,18 @@ public class TableService {
 
     public TableCreateReport validateCreatTable(TableCreate tableCreate) throws SQLException {
         return tableValidator.isCreateTableValid(tableCreate);
+    }
+
+    public boolean createTable(TableCreate tableCreate) {
+        try {
+            Connection connection = this.connectionService.createConnection(tableCreate.getDatabaseServer().getServerName(),tableCreate.getDatabaseServer().getDatabaseName());
+            String query=tableQueryGenerator.generateQueryCreateTable(tableCreate);
+            Statement statement = connection.createStatement();
+            statement.execute(query);
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

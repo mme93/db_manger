@@ -23,5 +23,9 @@ public class TableController {
     public ResponseEntity<TableCreateReport> validateTables(@RequestBody TableCreate tableCreate) throws SQLException {
         return new ResponseEntity<>(tableService .validateCreatTable(tableCreate), HttpStatus.OK);
     }
+    @PostMapping("/create")
+    public ResponseEntity<Boolean> createTables(@RequestBody TableCreate tableCreate) throws SQLException {
+        return new ResponseEntity<>(tableService .createTable(tableCreate), HttpStatus.OK);
+    }
 
 }

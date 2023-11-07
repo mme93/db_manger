@@ -57,7 +57,7 @@
         <td>
             <select name="dataType">
                 <option value="INT">INT</option>
-                <option value="VARCHAR">VARCHAR</option>
+                <option value="VARCHAR(255)">VARCHAR(255)</option>
                 <option value="DATE">DATE</option>
             </select>
         </td>
@@ -116,10 +116,10 @@
     }
 
     function analyzeReport(data){
-        console.log(data.tableMetaColumnList);
-        console.log(data.keyReport +" | "+data.keyValid);
+       // console.log(data.tableMetaColumnList);
+       // console.log(data.keyReport +" | "+data.keyValid);
        // console.log(data.tableName+" | "+data.tableNameReport+" | "+data.tableNameValid);
-        console.log("TableValid: "+data.tableValid +" | Valid:"+data.valid);
+        //console.log("TableValid: "+data.tableValid +" | Valid:"+data.valid);
     }
 
     function addRow() {
@@ -201,8 +201,8 @@
                         firstOption.textContent="INT";
                         object.appendChild(firstOption);
                         let secondOption = document.createElement("option");
-                        secondOption.value="VARCHAR";
-                        secondOption.textContent="VARCHAR";
+                        secondOption.value="VARCHAR(255)";
+                        secondOption.textContent="VARCHAR(255)";
                         object.appendChild(secondOption);
                         let thirdOption = document.createElement("option");
                         thirdOption.value="DATE";
@@ -268,8 +268,54 @@
     }
 
     function createTable() {
-        //alert("Please first validate your Table")
-        console.log(tableColumnsArray)
+        if(tableColumnsArray.length>0){
+            //alert("Please first validate your Table")
+            console.log(tableColumnsArray)
+            const serverUrl = /*[[${@environment.getProperty('spring.config.serverUrl')}]]*/ '';
+            const url = serverUrl + "restTable/create"
+            let tableNameInputEle=document.getElementById("tableNameInput");
+            const databaseServer = {
+                serverName: /*[[${serverName}]]*/ 'ServernameFallback',
+                databaseName: /*[[${databaseName}]]*/ 'DatabaseNameFallback',
+                tableName: tableNameInputEle.value
+            };
+            let copyTableColumnsArray=tableColumnsArray;
+            for(let i=0;i<copyTableColumnsArray.length;i++) {
+                if (copyTableColumnsArray[i].columnKey === 'No Key') {
+                    copyTableColumnsArray[i].columnKey = '';
+                }
+            }
+
+            const anfrage = {
+                databaseServer: databaseServer,
+                tableMetaColumnList: copyTableColumnsArray
+            }
+
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(anfrage)
+                //body: JSON.stringify(tableColumnsArray)
+            };
+
+            fetch(url, requestOptions)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    analyzeReport(data)
+                })
+                .catch(error => {
+                    console.error('Fehler bei der POST-Anfrage:', error);
+                });
+
+        }
+
     }
 
     function resetTable() {
@@ -352,8 +398,8 @@
             firstOption.textContent = "INT";
             dataType.appendChild(firstOption);
             secondOption = document.createElement("option");
-            secondOption.value = "VARCHAR";
-            secondOption.textContent = "VARCHAR";
+            secondOption.value = "VARCHAR(255)";
+            secondOption.textContent = "VARCHAR(255)";
             dataType.appendChild(secondOption);
             let thirdOption = document.createElement("option");
             thirdOption.value = "DATE";
