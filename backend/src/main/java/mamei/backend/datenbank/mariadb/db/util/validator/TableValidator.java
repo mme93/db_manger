@@ -23,21 +23,71 @@ public class TableValidator {
         this.connectionService = connectionService;
     }
 
-    public TableCreateReport isCreateTableValid(TableCreate tableCreate) throws SQLException {
+    public TableCreateReport isCreateTableValid(TableCreate tableCreate) {
         TableCreateReport report = new TableCreateReport();
-        report.setTableName(tableCreate.getDatabaseServer().getTableName());
-        report = checkTableName(report,tableCreate.getDatabaseServer());
-        report = hasPrimaryKey(report, tableCreate.getTableMetaColumnList());
+
+        try {
+            report.setSqlExceptionReport("");
+            report.setKeyReport("");
+            report.setTableNameReport("");
+            report.setTableMetaColumnList(tableCreate.getTableMetaColumnList());
+            report.setTableName(tableCreate.getDatabaseServer().getTableName());
+            report = checkTableName(report, tableCreate.getDatabaseServer());
+            report = hasPrimaryKey(report, tableCreate.getTableMetaColumnList());
+            report = checkColumnNames(report, tableCreate.getTableMetaColumnList());
+            report = checkColumnNameIsEmpty(report, tableCreate.getTableMetaColumnList());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            report.setSqlExceptionReport(e.getMessage());
+        }
+        return report;
+    }
+
+    private TableCreateReport checkColumnNameIsEmpty(TableCreateReport report, List<TableColumn> tableMetaColumnList) {
+        List<String> columnNameReport = new ArrayList<>();
+        for (int i = 0; i < tableMetaColumnList.size(); i++) {
+            if (tableMetaColumnList.get(i).getColumnName() == null || tableMetaColumnList.get(i).getColumnName().length() == 0) {
+                columnNameReport.add("No Column Name in index: " + i + ".");
+            }
+        }
+        report.setColumnNameIsEmptyReport(columnNameReport);
+        return report;
+    }
+
+    private boolean checkNameRule(String columnName) {
+        List<Character> charList = new ArrayList<>();
+        for (char c : columnName.toCharArray()) {
+            charList.add(c);
+        }
+        return charList.stream().filter(c -> Character.isLowerCase(c)).count() > 0;
+
+    }
+
+    private TableCreateReport checkColumnNames(TableCreateReport report, List<TableColumn> tableMetaColumnList) {
+        List<String> columnNameRuleReport = new ArrayList<>();
+        for (int i = 0; i < tableMetaColumnList.size(); i++) {
+            String columnName = tableMetaColumnList.get(i).getColumnName();
+            if (columnName.length() > 0) {
+                if (checkNameRule(columnName)) {
+                    String copy = columnName;
+                    columnName = columnName.toUpperCase();
+                    columnName = columnName.replaceAll(" ", "_");
+                    columnNameRuleReport.add("Wrong syntax in " + copy + " with index: " + i + ". You can write for example " +
+                            columnName + ".");
+                }
+            }
+        }
+        report.setColumnNameRuleReport(columnNameRuleReport);
         return report;
     }
 
     private TableCreateReport checkTableName(TableCreateReport report, DatabaseServer databaseServer) throws SQLException {
         String tableNameReport = "";
         report.setTableNameValid(true);
-        if (tableNameAllReadyExist(report.getTableName(),databaseServer)) {
+        if (tableNameAllReadyExist(report.getTableName(), databaseServer)) {
             tableNameReport = "Table all ready exist. \n";
             report.setTableNameValid(false);
-        }else if (!checkTableNamRules(report.getTableName())) {
+        } else if (!checkTableNamRules(report.getTableName())) {
             tableNameReport = generateTableNameImprovement(tableNameReport, report.getTableName());
             report.setTableNameValid(false);
         }
@@ -48,8 +98,8 @@ public class TableValidator {
 
     private String generateTableNameImprovement(String tableNameReport, String tableName) {
         if (tableName.length() > 0) {
-            tableNameReport = tableNameReport + "Problems with Table name Convention, here is one improvement exampel: \n";
-            tableNameReport = tableNameReport + "New Table Name: " + tableName.replaceAll(" ", "_").toLowerCase();
+            tableNameReport = tableNameReport + "Failure in "+tableName+" Table Name Convention. ";
+            tableNameReport = tableNameReport + "Example: " + tableName.replaceAll(" ", "_").toUpperCase();
         } else {
             tableNameReport = tableNameReport + "Table Name ist empty.";
         }
@@ -57,17 +107,10 @@ public class TableValidator {
     }
 
     private boolean checkTableNamRules(String tableName) {
-        if(tableName.contains(" ")){
+        if (tableName.contains(" ")) {
             return false;
         }
-        List<Character> charList = new ArrayList<>();
-        if (tableName.length() > 0) {
-            for (char c : tableName.toCharArray()) {
-                charList.add(c);
-            }
-            return (charList.stream().filter(c -> Character.isUpperCase(c)||c.equals("_")).count() == 0);
-        }
-        return false;
+        return !checkNameRule(tableName);
     }
 
     private boolean tableNameAllReadyExist(String tableName, DatabaseServer databaseServer) throws SQLException {
@@ -104,7 +147,7 @@ public class TableValidator {
         }).count();
         report.setKeyValid(false);
         if (count == 0) {
-            report.setKeyReport("No Key Primary Key found.");
+            report.setKeyReport("No Key like Primary Key found.");
             return report;
         } else if (count > 1) {
             report.setKeyReport("More than one Primary key found.");
@@ -115,11 +158,6 @@ public class TableValidator {
     }
 
     private boolean checkAutoIncrementRules() {
-
-        return true;
-    }
-
-    private boolean checkColNameRules() {
 
         return true;
     }

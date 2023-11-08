@@ -16,7 +16,11 @@ public class TableCreateReport {
     private boolean isTableNameValid;
     private boolean isTableValid;
     private boolean isKeyValid;
+    private boolean isColumnNameValid;
     //Report
     private String tableNameReport;
     private String keyReport;
+    private List<String> columnNameIsEmptyReport;
+    private List<String> columnNameRuleReport;
+    private String sqlExceptionReport;
 }
