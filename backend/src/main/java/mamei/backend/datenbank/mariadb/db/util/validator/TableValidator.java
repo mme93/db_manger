@@ -36,6 +36,9 @@ public class TableValidator {
             report = hasPrimaryKey(report, tableCreate.getTableMetaColumnList());
             report = checkColumnNames(report, tableCreate.getTableMetaColumnList());
             report = checkColumnNameIsEmpty(report, tableCreate.getTableMetaColumnList());
+            report.setTableValid(
+                    report.isTableNameValid() && report.isColumnNameValid() && report.isKeyValid()
+            );
         } catch (SQLException e) {
             e.printStackTrace();
             report.setSqlExceptionReport(e.getMessage());
@@ -50,6 +53,7 @@ public class TableValidator {
                 columnNameReport.add("No Column Name in index: " + i + ".");
             }
         }
+        report.setColumnNameValid(columnNameReport.size()==0);
         report.setColumnNameIsEmptyReport(columnNameReport);
         return report;
     }
@@ -77,6 +81,7 @@ public class TableValidator {
                 }
             }
         }
+        report.setColumnNameValid(columnNameRuleReport.size()==0);
         report.setColumnNameRuleReport(columnNameRuleReport);
         return report;
     }

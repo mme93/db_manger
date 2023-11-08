@@ -15,13 +15,13 @@
 <div class="container">
     <span>Table Name:</span>
     <input type="text" style="width: 68%" id="tableNameInput">
-    <button id="button1" onclick="validateTable()" class="icon_button">
-        <i class="fas fa-check" style="color: green"></i>
+    <button id="button1" onclick="validateTable()" class="icon_button" style="color: yellow">
+        <i class="fas fa-check"></i>
     </button>
-    <button id="button2" onclick="createTable()" class="icon_button">
+    <button id="button2" onclick="createTable()" class="icon_button" style="color: red" disabled="true">
         <i class="fas fa-floppy-disk"></i>
     </button>
-    <button id="button3" onclick="resetTable()" class="icon_button">
+    <button id="button3" onclick="resetTable()" class="icon_button" style="color: grey">
         <i class="fas fa-trash"></i>
     </button>
 </div>
@@ -72,14 +72,14 @@
     </tr>
 </table>
 <script type="text/javascript" th:inline="javascript">
-    let tableColumnsArray= [];
+    let tableColumnsArray = [];
     let number = 1;
 
     function validateTable() {
 
         const serverUrl = /*[[${@environment.getProperty('spring.config.serverUrl')}]]*/ '';
         const url = serverUrl + "restTable/validate"
-        let tableNameInputEle=document.getElementById("tableNameInput");
+        let tableNameInputEle = document.getElementById("tableNameInput");
         const databaseServer = {
             serverName: /*[[${serverName}]]*/ 'ServernameFallback',
             databaseName: /*[[${databaseName}]]*/ 'DatabaseNameFallback',
@@ -115,13 +115,17 @@
             });
     }
 
-    function analyzeReport(data){
-        console.log(tableColumnsArray)
-        console.log(data)
-       // console.log(data.tableMetaColumnList);
-       // console.log(data.keyReport +" | "+data.keyValid);
-       // console.log(data.tableName+" | "+data.tableNameReport+" | "+data.tableNameValid);
-        //console.log("TableValid: "+data.tableValid +" | Valid:"+data.valid);
+    function analyzeReport(data) {
+
+        if (data.tableValid) {
+            document.getElementById("button1").style.color = "green"
+            document.getElementById("button2").style.color = "green"
+            document.getElementById("button2").disabled=false;
+        } else {
+            document.getElementById("button1").style.color = "yellow"
+            document.getElementById("button2").style.color = "red"
+            document.getElementById("button2").disabled=true;
+        }
     }
 
     function addRow() {
@@ -151,7 +155,7 @@
                     object.type = "checkbox";
                     object.checked = input.checked;
                     object.addEventListener("change", function () {
-                        changeValue(object.checked ,nr.textContent, 'nullAble')
+                        changeValue(object.checked, nr.textContent, 'nullAble')
                     });
                     metColumn.nullAble = value;
                 } else if (input.type === 'button') {
@@ -166,72 +170,72 @@
                         object = document.createElement("input");
                         object.type = "text";
                         object.textContent = value;
-                        object.value=value;
+                        object.value = value;
                         object.addEventListener("input", function () {
-                            changeValue(object.value ,nr.textContent, 'columnName')
+                            changeValue(object.value, nr.textContent, 'columnName')
                         });
                         metColumn.columnName = value;
                     } else if (name === 'primaryKey') {
                         metColumn.columnKey = value;
                         object = document.createElement("select");
                         let firstOption = document.createElement("option");
-                        firstOption.value="No Key";
-                        firstOption.textContent="No Key";
+                        firstOption.value = "No Key";
+                        firstOption.textContent = "No Key";
                         object.appendChild(firstOption);
                         let secondOption = document.createElement("option");
-                        secondOption.value="PRIMARY";
-                        secondOption.textContent="PRIMARY";
+                        secondOption.value = "PRIMARY";
+                        secondOption.textContent = "PRIMARY";
                         object.appendChild(secondOption);
-                        object.value=value;
+                        object.value = value;
                         object.addEventListener("change", function () {
-                            changeValue(object.value ,nr.textContent, 'columnKey')
+                            changeValue(object.value, nr.textContent, 'columnKey')
                         });
                     } else if (name === 'defaultValue') {
                         object = document.createElement("input");
                         object.type = "text";
                         object.textContent = value;
-                        object.value=value;
+                        object.value = value;
                         object.addEventListener("input", function () {
-                            changeValue(object.value ,nr.textContent, 'columnDefault')
+                            changeValue(object.value, nr.textContent, 'columnDefault')
                         });
                         metColumn.columnDefault = value;
                     } else if (name === 'dataType') {
                         metColumn.columnType = value;
                         object = document.createElement("select");
                         let firstOption = document.createElement("option");
-                        firstOption.value="INT";
-                        firstOption.textContent="INT";
+                        firstOption.value = "INT";
+                        firstOption.textContent = "INT";
                         object.appendChild(firstOption);
                         let secondOption = document.createElement("option");
-                        secondOption.value="VARCHAR(255)";
-                        secondOption.textContent="VARCHAR(255)";
+                        secondOption.value = "VARCHAR(255)";
+                        secondOption.textContent = "VARCHAR(255)";
                         object.appendChild(secondOption);
                         let thirdOption = document.createElement("option");
-                        thirdOption.value="DATE";
-                        thirdOption.textContent="DATE";
+                        thirdOption.value = "DATE";
+                        thirdOption.textContent = "DATE";
                         object.addEventListener("change", function () {
-                            changeValue(object.value ,nr.textContent, 'columnType')
+                            changeValue(object.value, nr.textContent, 'columnType')
                         });
                         object.appendChild(thirdOption);
-                        object.value=value;
+                        object.value = value;
                     } else if (name === 'extra') {
                         metColumn.extra = value;
                         object = document.createElement("select");
                         let firstOption = document.createElement("option");
-                        firstOption.value="";
-                        firstOption.textContent="Kein Extra";
+                        firstOption.value = "";
+                        firstOption.textContent = "Kein Extra";
                         object.appendChild(firstOption);
                         let secondOption = document.createElement("option");
-                        secondOption.value="AUTO_INCREMENT";
-                        secondOption.textContent="AUTO_INCREMENT";
+                        secondOption.value = "AUTO_INCREMENT";
+                        secondOption.textContent = "AUTO_INCREMENT";
                         object.appendChild(secondOption);
                         let thirdOption = document.createElement("option");
-                        thirdOption.value="UNIQUE";
-                        thirdOption.textContent="UNIQUE";
+                        thirdOption.value = "UNIQUE";
+                        thirdOption.textContent = "UNIQUE";
                         object.appendChild(thirdOption);
-                        object.value=value;
+                        object.value = value;
                         object.addEventListener("change", function () {
-                            changeValue(object.value ,nr.textContent, 'extra')
+                            changeValue(object.value, nr.textContent, 'extra')
                         });
                     }
                 }
@@ -270,19 +274,17 @@
     }
 
     function createTable() {
-        if(tableColumnsArray.length>0){
-            //alert("Please first validate your Table")
-            console.log(tableColumnsArray)
+        if (tableColumnsArray.length > 0) {
             const serverUrl = /*[[${@environment.getProperty('spring.config.serverUrl')}]]*/ '';
             const url = serverUrl + "restTable/create"
-            let tableNameInputEle=document.getElementById("tableNameInput");
+            let tableNameInputEle = document.getElementById("tableNameInput");
             const databaseServer = {
                 serverName: /*[[${serverName}]]*/ 'ServernameFallback',
                 databaseName: /*[[${databaseName}]]*/ 'DatabaseNameFallback',
                 tableName: tableNameInputEle.value
             };
-            let copyTableColumnsArray=tableColumnsArray;
-            for(let i=0;i<copyTableColumnsArray.length;i++) {
+            let copyTableColumnsArray = tableColumnsArray;
+            for (let i = 0; i < copyTableColumnsArray.length; i++) {
                 if (copyTableColumnsArray[i].columnKey === 'No Key') {
                     copyTableColumnsArray[i].columnKey = '';
                 }
@@ -310,10 +312,14 @@
                     return response.json();
                 })
                 .then(data => {
-                    analyzeReport(data)
+                    if(data){
+                        window.location.href=serverUrl+'web/tables/'+ databaseServer.serverName+'/'+databaseServer.databaseName;
+                    }else{
+                        alert('Fehler bei der POST-Anfrage.');
+                    }
                 })
                 .catch(error => {
-                    console.error('Fehler bei der POST-Anfrage:', error);
+                    alert('Fehler bei der POST-Anfrage:', error);
                 });
 
         }
@@ -350,7 +356,7 @@
             colName.textContent = tableColumnsArray[i].columnName;
             colName.value = tableColumnsArray[i].columnName;
             colName.addEventListener("input", function () {
-                changeValue(colName.value,nr.textContent, 'columnName')
+                changeValue(colName.value, nr.textContent, 'columnName')
             });
             colNameTd.appendChild(colName);
             tr.appendChild(colNameTd);
@@ -368,7 +374,7 @@
             keyName.value = tableColumnsArray[i].columnKey;
             keyNameTd.appendChild(keyName);
             keyNameTd.addEventListener("change", function () {
-                changeValue(keyName.value,nr.textContent, 'columnKey')
+                changeValue(keyName.value, nr.textContent, 'columnKey')
             })
             tr.appendChild(keyNameTd);
             //IsNullable
@@ -377,7 +383,7 @@
             isNullAble.type = "checkbox";
             isNullAble.checked = tableColumnsArray[i].nullAble;
             isNullAble.addEventListener("change", function () {
-                changeValue(isNullAble.checked ,nr.textContent, 'nullAble')
+                changeValue(isNullAble.checked, nr.textContent, 'nullAble')
             });
             isNullAbleTd.appendChild(isNullAble);
             tr.appendChild(isNullAbleTd);
@@ -388,7 +394,7 @@
             defaultValue.textContent = tableColumnsArray[i].columnDefault;
             defaultValue.value = tableColumnsArray[i].columnDefault;
             defaultValue.addEventListener("input", function () {
-                changeValue(defaultValue.value,nr.textContent, 'columnDefault')
+                changeValue(defaultValue.value, nr.textContent, 'columnDefault')
             });
             defaultValueTd.appendChild(defaultValue);
             tr.appendChild(defaultValueTd);
@@ -409,7 +415,7 @@
             dataType.appendChild(thirdOption);
             dataType.value = tableColumnsArray[i].columnType;
             dataType.addEventListener("change", function () {
-                changeValue(dataType.value,nr.textContent, 'columnType')
+                changeValue(dataType.value, nr.textContent, 'columnType')
             });
             dataTypeTd.appendChild(dataType);
             tr.appendChild(dataTypeTd);
@@ -432,7 +438,7 @@
             extraTd.appendChild(extra);
             extra.value = tableColumnsArray[i].extra;
             extra.addEventListener("change", function () {
-                changeValue(extra.value,nr.textContent, 'extra')
+                changeValue(extra.value, nr.textContent, 'extra')
             });
             tr.appendChild(extraTd);
             //Button
@@ -448,20 +454,21 @@
             number++;
         }
     }
-    function changeValue(value, nr, colName){
-        const index=Number(nr)-1;
-        if(colName === 'columnName'){
-            tableColumnsArray[index].columnName=value;
-        }else if(colName === 'columnKey'){
-            tableColumnsArray[index].columnKey=value;
-        }else if(colName === 'nullAble'){
-            tableColumnsArray[index].nullAble=value;
-        }else if(colName === 'columnDefault'){
-            tableColumnsArray[index].columnDefault=value;
-        }else if(colName === 'columnType'){
-            tableColumnsArray[index].columnType=value;
-        }else if(colName === 'extra'){
-            tableColumnsArray[index].extra=value;
+
+    function changeValue(value, nr, colName) {
+        const index = Number(nr) - 1;
+        if (colName === 'columnName') {
+            tableColumnsArray[index].columnName = value;
+        } else if (colName === 'columnKey') {
+            tableColumnsArray[index].columnKey = value;
+        } else if (colName === 'nullAble') {
+            tableColumnsArray[index].nullAble = value;
+        } else if (colName === 'columnDefault') {
+            tableColumnsArray[index].columnDefault = value;
+        } else if (colName === 'columnType') {
+            tableColumnsArray[index].columnType = value;
+        } else if (colName === 'extra') {
+            tableColumnsArray[index].extra = value;
         }
     }
 

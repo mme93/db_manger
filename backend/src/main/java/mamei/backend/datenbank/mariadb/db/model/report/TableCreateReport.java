@@ -9,7 +9,6 @@ import java.util.List;
 @Getter
 @Setter
 public class TableCreateReport {
-    private boolean isValid;
     private String tableName;
     private List<TableColumn> tableMetaColumnList;
     //Checks
