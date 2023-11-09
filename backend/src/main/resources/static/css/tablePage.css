@@ -1,20 +1,22 @@
 .table-overview {
     margin-top: 5vh;
     width: 100%;
+    background-color: #FFA500;
+    color: black;
 }
 
 .table-overview table {
     width: 100%;
     border-collapse: collapse;
-    border: 1px solid #FFA500;
+    border: 1px solid black;
 }
 
 .table-overview td {
-    border: 2px solid #FFA500;
+    border: 2px solid black;
 }
 
 .table-overview th {
-    border: 2px solid #FFA500;
+    border: 2px solid black;
 }
 
 .table-overview input {
