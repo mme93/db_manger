@@ -25,13 +25,21 @@ public class WebPageController {
     @GetMapping("/table/{serverName}/{databaseName}/{tableName}")
     public String getTableContext(Model model, @PathVariable String databaseName, @PathVariable String serverName, @PathVariable String tableName) throws SQLException {
         model.addAttribute("tableName", tableName);
-        model.addAttribute("tableView",  tableService.getTableContext(new DatabaseServer(serverName, databaseName, tableName)));
+        model.addAttribute("tableView", tableService.getTableContext(new DatabaseServer(serverName, databaseName, tableName)));
         return "html/tablePage";
     }
 
     @GetMapping("/overview")
     public String overviewPage(Model model) {
         model.addAttribute("serverNameList", overviewPageService.getServerNameList());
+        return "html/overviewPage";
+    }
+
+    @GetMapping("/overview/preselected/{serverName}/{databaseName}")
+    public String overviewPagePreselected(@PathVariable String databaseName, @PathVariable String serverName, Model model) {
+        DatabaseServer databaseServer = new DatabaseServer(serverName,databaseName,null);
+        model.addAttribute("serverNameList", overviewPageService.getServerNameList());
+        model.addAttribute("databaseServer",databaseServer);
         return "html/overviewPage";
     }
 
@@ -42,11 +50,12 @@ public class WebPageController {
         model.addAttribute("tableNames", tableService.getTableNamesFromDatabase(new DatabaseServer(serverName, databaseName, null)));
         return "html/tableOverviewPage";
     }
+
     @GetMapping("/createTablePage/{serverName}/{databaseName}")
     public String getCreateTable(@PathVariable String databaseName, @PathVariable String serverName, Model model) throws SQLException {
         model.addAttribute("serverName", serverName);
         model.addAttribute("databaseName", databaseName);
-        model.addAttribute("title", "Create Table in Database: "+databaseName);
+        model.addAttribute("title", "Create Table in Database: " + databaseName);
         return "html/createTablePage";
     }
 }

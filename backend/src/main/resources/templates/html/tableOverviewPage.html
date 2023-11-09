@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link th:href="@{/css/main.css}" rel="stylesheet"/>
     <link th:href="@{/css/databaseOverviewPage.css}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 
@@ -13,39 +14,61 @@
 </div>
 
 
-<div class="database_panel">
-    <div class="flex-container">
-        <p>Servername: <strong><span th:text="${serverName}">[Servername]</span></strong></p>
+<div class="container">
+    <div class="info-container">
+        <p style="margin-right: 5px">Servername: <strong><span th:text="${serverName}">[Servername]</span></strong></p>
         <p>Databasename: <strong><span th:text="${databaseName}">[Databasename]</span></strong></p>
-        <div class="buttons">
-            <button onclick="createTable()">Create Table</button>
-            <button>Overview</button>
-        </div>
+    </div>
+    <div class="button-container">
+        <button id="button1" class="icon_button" onclick="back()">
+            <i class="fas fa-circle-left"></i>
+        </button>
+        <button id="button2" class="icon_button" onclick="createTable()">
+            <i class="fas fa-file"></i>
+        </button>
     </div>
 
+</div>
 
-    <div>
-        <h4>Table Overview:</h4>
-        <ul>
-            <li th:each="tableName : ${tableNames}">
+<div class="database_panel">
+
+    <table>
+        <tr>
+            <th style="border: black solid 1px">Table Name</th>
+            <th style="border: black solid 1px">Action</th>
+        </tr>
+        <tr th:each="tableName : ${tableNames}">
+            <td style="width: 80vw;border: black solid 1px">
                 <span th:text="${tableName}"></span>
+            </td>
+            <td style="border: black solid 1px">
                 <button id="loadTable" name="loadTable" th:onclick="openTable([[${tableName}]])">Open</button>
-            </li>
-        </ul>
-    </div>
+            </td>
+        </tr>
+    </table>
+
 </div>
 <script type="text/javascript" th:inline="javascript">
-    function createTable(){
+
+    function back() {
         const serverUrl = /*[[${@environment.getProperty('spring.config.serverUrl')}]]*/ '';
         let serverName = /*[[${serverName}]]*/ 'ServernameFallback';
         let databaseName = /*[[${databaseName}]]*/ 'DatabaseNameFallback';
-        window.location.href = serverUrl+'web/createTablePage/' + serverName + '/' + databaseName;
+        window.location.href = serverUrl + 'web/overview/preselected/' + serverName + '/' + databaseName;
     }
+
+    function createTable() {
+        const serverUrl = /*[[${@environment.getProperty('spring.config.serverUrl')}]]*/ '';
+        let serverName = /*[[${serverName}]]*/ 'ServernameFallback';
+        let databaseName = /*[[${databaseName}]]*/ 'DatabaseNameFallback';
+        window.location.href = serverUrl + 'web/createTablePage/' + serverName + '/' + databaseName;
+    }
+
     function openTable(tableName) {
         const serverUrl = /*[[${@environment.getProperty('spring.config.serverUrl')}]]*/ '';
         let serverName = /*[[${serverName}]]*/ 'ServernameFallback';
         let databaseName = /*[[${databaseName}]]*/ 'DatabaseNameFallback';
-        window.location.href = serverUrl+'web/table/' + serverName + '/' + databaseName + '/' + tableName;
+        window.location.href = serverUrl + 'web/table/' + serverName + '/' + databaseName + '/' + tableName;
     }
 
 </script>
