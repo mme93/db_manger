@@ -53,8 +53,7 @@
     function back() {
         const serverUrl = /*[[${@environment.getProperty('spring.config.serverUrl')}]]*/ '';
         let serverName = /*[[${serverName}]]*/ 'ServernameFallback';
-        let databaseName = /*[[${databaseName}]]*/ 'DatabaseNameFallback';
-        window.location.href = serverUrl + 'web/overview/preselected/' + serverName + '/' + databaseName;
+        window.location.href=serverUrl+'web/database/'+ serverName;
     }
 
     function createTable() {

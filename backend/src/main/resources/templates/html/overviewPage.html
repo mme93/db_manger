@@ -33,77 +33,13 @@
 </div>
 
 <script type="text/javascript" th:inline="javascript">
-
-    preSelect();
-
-    function preSelect(){
-        let databaseServer = /*[[${databaseServer}]]*/ 'DatabaseServerFallback';
-        if(databaseServer !== null){
-            let databaseList = document.getElementById('databaseList');
-            const serverUrl = /*[[${@environment.getProperty('spring.config.serverUrl')}]]*/ '';
-            fetch(serverUrl+'database/' + databaseServer.serverName + '/names', {method: 'POST'})
-                .then(response => response.json())
-                .then(data => {
-                    databaseList.innerHTML = '';
-                    const h4Tile = document.createElement('h4');
-                    h4Tile.textContent = "Database Overview"
-                    databaseList.appendChild(h4Tile);
-                    data.forEach(databaseName => {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = databaseName;
-                        listItem.classList.add('database-list-item');
-                        const button = document.createElement('button');
-                        button.textContent = 'Open';
-                        button.addEventListener('click', function () {
-                            window.location.href=serverUrl+'web/tables/'+ databaseServer.serverName+'/'+databaseServer.databaseName;
-                        });
-
-                        listItem.appendChild(button);
-                        databaseList.appendChild(listItem);
-                    });
-                })
-                .catch(error => {
-                    console.error('Fehler beim Abrufen der Datenbanken: ' + error);
-                });
-        }
-    }
-
-
     document.addEventListener('DOMContentLoaded', function () {
-        let select = document.getElementById('linuxServer');
-        let databaseList = document.getElementById('databaseList');
         let loadConfigButton = document.getElementById('loadConfig');
-
-        select.addEventListener('change', function () {
-            databaseList.innerHTML = '';
-        })
-
+        let select = document.getElementById('linuxServer');
         loadConfigButton.addEventListener('click', function () {
+            const serverName=select.value;
             const serverUrl = /*[[${@environment.getProperty('spring.config.serverUrl')}]]*/ '';
-            fetch(serverUrl+'database/' + select.value + '/names', {method: 'POST'})
-                .then(response => response.json())
-                .then(data => {
-                    databaseList.innerHTML = '';
-                    const h4Tile = document.createElement('h4');
-                    h4Tile.textContent = "Database Overview"
-                    databaseList.appendChild(h4Tile);
-                    data.forEach(databaseName => {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = databaseName;
-                        listItem.classList.add('database-list-item');
-                        const button = document.createElement('button');
-                        button.textContent = 'Open';
-                        button.addEventListener('click', function () {
-                            window.location.href=serverUrl+'web/tables/'+ select.value+'/'+databaseName;
-                        });
-
-                        listItem.appendChild(button);
-                        databaseList.appendChild(listItem);
-                    });
-                })
-                .catch(error => {
-                    console.error('Fehler beim Abrufen der Datenbanken: ' + error);
-                });
+            window.location.href=serverUrl+'web/database/'+ serverName;
         });
     });
 </script>
