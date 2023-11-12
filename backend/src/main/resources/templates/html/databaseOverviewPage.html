@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/main.css}" rel="stylesheet"/>
+    <link th:href="@{/css/databasePage.css}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<div class="page_header">
+    <h1 class="page_title">DB Manger</h1>
+</div>
+<h1>
+    <span>Database Overview for Server: </span>
+    <span th:text="${serverName}"></span>
+</h1>
+
+<table>
+    <tr>
+        <th><span>Name</span></th>
+        <th class="action_col"><span>Open</span></th>
+        <th class="action_col"><span>Edit</span></th>
+        <th class="action_col"><span>Delete</span></th>
+    </tr>
+    <tr th:each="databaseName : ${databaseNameList}">
+        <td>
+            <span th:text="${databaseName}"
+                  th:value="${databaseName}"
+                  ondblclick="convertToInput(this)"></span>
+        </td>
+        <td>
+            <button>
+                <i class="fas fa-square-arrow-up-right"></i>
+            </button>
+        </td>
+        <td>
+            <button>
+                <i class="fas fa-pen-to-square"></i>
+            </button>
+        </td>
+        <td>
+            <button>
+                <i class="fas fa-trash"></i>
+            </button>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

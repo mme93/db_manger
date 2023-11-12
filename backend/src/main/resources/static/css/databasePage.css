@@ -1,0 +1,30 @@
+table{
+    margin-top: 5px;
+    width: 100%;
+    background-color: #FFA500;
+    color: black;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    border: solid #FFA500 3px;
+}
+table th, td{
+    border: solid black 3px;
+
+}
+table button{
+    width: 98%;
+}
+
+.container {
+    background-color: #FFA500;
+    color: black;
+    margin-top: 5px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 5px;
+}
+
+.action_col{
+    width: 5vw;
+}

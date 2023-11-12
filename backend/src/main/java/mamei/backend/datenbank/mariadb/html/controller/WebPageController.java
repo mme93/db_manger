@@ -2,6 +2,7 @@ package mamei.backend.datenbank.mariadb.html.controller;
 
 
 import mamei.backend.datenbank.mariadb.db.model.DatabaseServer;
+import mamei.backend.datenbank.mariadb.db.service.DatabaseService;
 import mamei.backend.datenbank.mariadb.html.service.OverviewPageService;
 import mamei.backend.datenbank.mariadb.db.service.TableService;
 import org.springframework.stereotype.Controller;
@@ -16,10 +17,12 @@ public class WebPageController {
 
     private final OverviewPageService overviewPageService;
     private final TableService tableService;
+    private final DatabaseService databaseService;
 
-    public WebPageController(OverviewPageService overviewPageService, TableService tableService) {
+    public WebPageController(OverviewPageService overviewPageService, TableService tableService, DatabaseService databaseService) {
         this.overviewPageService = overviewPageService;
         this.tableService = tableService;
+        this.databaseService = databaseService;
     }
 
     @GetMapping("/table/{serverName}/{databaseName}/{tableName}")
@@ -58,4 +61,12 @@ public class WebPageController {
         model.addAttribute("title", "Create Table in Database: " + databaseName);
         return "html/createTablePage";
     }
+
+    @GetMapping("/database/{serverName}")
+    public String getDatabaseOverviewPage(Model model, @PathVariable String serverName) throws SQLException {
+        model.addAttribute("serverName",serverName);
+        model.addAttribute("databaseNameList",databaseService.getDatabaseNameByServer(serverName));
+        return "html/databaseOverviewPage";
+    }
+
 }
