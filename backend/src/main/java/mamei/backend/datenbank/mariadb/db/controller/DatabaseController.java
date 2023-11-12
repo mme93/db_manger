@@ -18,6 +18,7 @@ public class DatabaseController {
         this.databaseService = databaseService;
     }
 
+    //TODO: Prüfen ob das Postmapping verwendet wird? Müsste eigentlich beim ehmalig Server aussuchen verwendet werden.
     @PostMapping("/{serverName}/names")
     public ResponseEntity<List<String>> getDatabaseNameByServer(@PathVariable String serverName) {
         try {
@@ -27,4 +28,15 @@ public class DatabaseController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
+
+    @PostMapping("/create")
+    public void createDatabase(@RequestBody String databaseName){
+        System.err.println(databaseName);
+    }
+
+    @PostMapping("/delete")
+    public void deleteDatabase(@RequestBody String databaseName){
+        System.err.println(databaseName);
+    }
+
 }

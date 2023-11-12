@@ -7,19 +7,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+
 <div class="page_header">
     <h1 class="page_title">DB Manger</h1>
 </div>
+
 <h1>
     <span>Database Overview for Server: </span>
     <span th:text="${serverName}"></span>
 </h1>
 
+<div class="container">
+    <span style="margin-right: 5px">Database Name:</span>
+    <input type="text" style="flex: 5" id="tableNameInput">
+
+    <button id="button2" onclick="createDatabase()" class="icon_button">
+        <i class="fas fa-floppy-disk"></i>
+    </button>
+
+</div>
+
 <table>
     <tr>
         <th><span>Name</span></th>
         <th class="action_col"><span>Open</span></th>
-        <th class="action_col"><span>Edit</span></th>
         <th class="action_col"><span>Delete</span></th>
     </tr>
     <tr th:each="databaseName : ${databaseNameList}">
@@ -29,22 +40,34 @@
                   ondblclick="convertToInput(this)"></span>
         </td>
         <td>
-            <button>
+            <button th:onclick="openDatabase([[${databaseName}]])">
                 <i class="fas fa-square-arrow-up-right"></i>
             </button>
         </td>
         <td>
-            <button>
-                <i class="fas fa-pen-to-square"></i>
-            </button>
-        </td>
-        <td>
-            <button>
+            <button th:onclick="deleteDatabase([[${databaseName}]])">
                 <i class="fas fa-trash"></i>
             </button>
         </td>
     </tr>
 </table>
 
+<script type="text/javascript" th:inline="javascript">
+    const serverUrl = /*[[${@environment.getProperty('spring.config.serverUrl')}]]*/ '';
+    let serverName = /*[[${serverName}]]*/ 'ServernameFallback';
+
+    function createDatabase() {
+        let tableNameInput = document.getElementById("tableNameInput").value;
+        console.log(tableNameInput)
+    }
+
+    function openDatabase(databaseName) {
+        window.location.href=serverUrl+'web/tables/'+ serverName+'/'+databaseName;
+    }
+
+    function deleteDatabase(databaseName) {
+
+    }
+</script>
 </body>
 </html>
