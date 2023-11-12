@@ -58,7 +58,36 @@
 
     function createDatabase() {
         let tableNameInput = document.getElementById("tableNameInput").value;
-        console.log(tableNameInput)
+        const databaseServer = {
+            serverName: serverName,
+            databaseName: tableNameInput
+        }
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(databaseServer)
+        };
+        const url=serverUrl+"database/create"
+        fetch(url, requestOptions)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if(data){
+                    console.log(data)
+                }else{
+                    alert('Fehler bei der POST-Anfrage.');
+                }
+            })
+            .catch(error => {
+                alert('Fehler bei der POST-Anfrage:', error);
+            });
     }
 
     function openDatabase(databaseName) {
@@ -67,6 +96,36 @@
 
     function deleteDatabase(databaseName) {
 
+        const databaseServer = {
+            serverName: serverName,
+            databaseName: databaseName
+        }
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(databaseServer)
+        };
+        const url=serverUrl+"database/delete"
+        fetch(url, requestOptions)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if(data){
+                    console.log(data)
+                }else{
+                    alert('Fehler bei der POST-Anfrage.');
+                }
+            })
+            .catch(error => {
+                alert('Fehler bei der POST-Anfrage:', error);
+            });
     }
 </script>
 </body>

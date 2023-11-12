@@ -1,5 +1,6 @@
 package mamei.backend.datenbank.mariadb.db.controller;
 
+import mamei.backend.datenbank.mariadb.db.model.DatabaseServer;
 import mamei.backend.datenbank.mariadb.db.service.DatabaseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,13 +31,23 @@ public class DatabaseController {
     }
 
     @PostMapping("/create")
-    public void createDatabase(@RequestBody String databaseName){
-        System.err.println(databaseName);
+    public ResponseEntity<Boolean> createDatabase(@RequestBody DatabaseServer databaseServer) {
+        try {
+            return new ResponseEntity<>(databaseService.createDatabase(databaseServer), HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
     @PostMapping("/delete")
-    public void deleteDatabase(@RequestBody String databaseName){
-        System.err.println(databaseName);
+    public ResponseEntity<Boolean> deleteDatabase(@RequestBody DatabaseServer databaseServer) {
+        try {
+            return new ResponseEntity<>(databaseService.deleteDatabase(databaseServer), HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package mamei.backend.datenbank.mariadb.db.service;
 
+import mamei.backend.datenbank.mariadb.db.model.DatabaseServer;
 import mamei.backend.datenbank.mariadb.db.util.sql.SQLStatement;
 import mamei.backend.datenbank.mariadb.db.util.sqlgenerator.ServerQueryGenerator;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,24 @@ public class DatabaseService {
     }
 
     public List<String> getDatabaseNameByServer(String serverName) throws SQLException {
-        String response=sqlStatement.executeStatement(serverQueryGenerator.showAllDatabaseFromServer(),connectionService.createConnection(serverName),1);
-        List<String>databaseNameList= asList(response.split("\n"));
+        String response = sqlStatement.executeStatement(serverQueryGenerator.showAllDatabaseFromServer(), connectionService.createConnection(serverName), 1);
+        List<String> databaseNameList = asList(response.split("\n"));
         return databaseNameList;
+    }
+
+    public boolean deleteDatabase(DatabaseServer databaseServer) throws SQLException {
+        String response = sqlStatement.executeUpdateStatement(
+                serverQueryGenerator.deleteDatabaseQuery(databaseServer.getDatabaseName()),
+                connectionService.createConnection(databaseServer.getServerName()));
+        System.err.println(response);
+        return true;
+    }
+
+    public boolean createDatabase(DatabaseServer databaseServer) throws SQLException {
+        String response = sqlStatement.executeUpdateStatement(
+                serverQueryGenerator.createDatabaseQuery(databaseServer.getDatabaseName()),
+                connectionService.createConnection(databaseServer.getServerName()));
+        System.err.println(response);
+        return true;
     }
 }

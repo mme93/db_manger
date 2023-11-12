@@ -2,10 +2,7 @@ package mamei.backend.datenbank.mariadb.db.util.sql;
 
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 @Service
 public class SQLStatement {
@@ -30,5 +27,21 @@ public class SQLStatement {
         }
         return stringBuilder.toString();
     }
+
+    public String executeUpdateStatement(String query, Connection connection) throws SQLException {
+        StringBuilder stringBuilder = new StringBuilder();
+        Statement statement= null;
+        try{
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            statement.close();
+            connection.close();
+        }
+        return stringBuilder.toString();
+    }
+
 
 }
