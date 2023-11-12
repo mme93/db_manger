@@ -56,6 +56,10 @@
     const serverUrl = /*[[${@environment.getProperty('spring.config.serverUrl')}]]*/ '';
     let serverName = /*[[${serverName}]]*/ 'ServernameFallback';
 
+    function refresh(){
+        window.location.href=serverUrl+'web/database/'+ serverName;
+    }
+
     function createDatabase() {
         let tableNameInput = document.getElementById("tableNameInput").value;
         const databaseServer = {
@@ -80,7 +84,8 @@
             })
             .then(data => {
                 if(data){
-                    console.log(data)
+                    console.log(data);
+                    refresh();
                 }else{
                     alert('Fehler bei der POST-Anfrage.');
                 }
@@ -118,7 +123,8 @@
             })
             .then(data => {
                 if(data){
-                    console.log(data)
+                    console.log(data);
+                    refresh();
                 }else{
                     alert('Fehler bei der POST-Anfrage.');
                 }
