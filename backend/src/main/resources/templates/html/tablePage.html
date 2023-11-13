@@ -8,14 +8,10 @@
 </head>
 <body>
 <div class="page_header" id="headerId">
-    <h1 class="page_title" th:text="${tableView.tableName}">[tableView.tableName]</h1>
+    <h1 class="page_title">Table Overview</h1>
 </div>
 
-
-
-<div id="newDataset" style="display: none">
-    <h4>Add new Dataset</h4>
-</div>
+<h4 th:text="${tableView.tableName}">[tableView.tableName]</h4>
 
 <button id="addButton" style="width: 100%">Add</button>
 

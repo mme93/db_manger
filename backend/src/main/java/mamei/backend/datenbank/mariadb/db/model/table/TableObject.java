@@ -143,7 +143,7 @@ public class TableObject {
 
     private boolean checkTableHasIdCol() {
         for (TableColumn column : tableColumns) {
-            if (column.getColumnName().equals("id")) {
+            if (column.getColumnName().equalsIgnoreCase("ID")) {
                 return true;
             }
         }

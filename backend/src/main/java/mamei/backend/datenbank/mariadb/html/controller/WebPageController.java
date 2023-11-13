@@ -38,14 +38,6 @@ public class WebPageController {
         return "html/overviewPage";
     }
 
-    @GetMapping("/overview/preselected/{serverName}/{databaseName}")
-    public String overviewPagePreselected(@PathVariable String databaseName, @PathVariable String serverName, Model model) {
-        DatabaseServer databaseServer = new DatabaseServer(serverName,databaseName,null);
-        model.addAttribute("serverNameList", overviewPageService.getServerNameList());
-        model.addAttribute("databaseServer",databaseServer);
-        return "html/overviewPage";
-    }
-
     @GetMapping("/tables/{serverName}/{databaseName}")
     public String getDatabaseOverview(@PathVariable String databaseName, @PathVariable String serverName, Model model) throws SQLException {
         model.addAttribute("serverName", serverName);
