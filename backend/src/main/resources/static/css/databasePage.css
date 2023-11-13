@@ -48,3 +48,32 @@ table i {
 .action_col {
     width: 5vw;
 }
+
+.confirmation-popup {
+    border: solid 3px black;
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FFA500;
+    color: black;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.confirmation-popup button {
+    margin: 0 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border: solid #171616 1px;
+    background-color: #f3b248;
+    color: black;
+}
+.confirmation-popup button:hover {
+    margin: 0 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+    background-color: #ffa81e;
+}

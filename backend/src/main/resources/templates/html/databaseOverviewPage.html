@@ -45,16 +45,30 @@
             </button>
         </td>
         <td>
-            <button th:onclick="deleteDatabase([[${databaseName}]])">
+            <button th:onclick="deleteDatabasePopup([[${databaseName}]])">
                 <i class="fas fa-trash"></i>
             </button>
         </td>
     </tr>
 </table>
 
+<div id="confirmationPopup" class="confirmation-popup">
+    <p>Do you really want to delete the database?</p>
+    <button id="confirmDelete" onclick="confirmDelete(true)">Yes</button>
+    <button id="cancelDelete" onclick="confirmDelete(false)">No</button>
+</div>
+
 <script type="text/javascript" th:inline="javascript">
     const serverUrl = /*[[${@environment.getProperty('spring.config.serverUrl')}]]*/ '';
     let serverName = /*[[${serverName}]]*/ 'ServernameFallback';
+    let selectedDatabase;
+
+    function confirmDelete(confirmed) {
+        document.getElementById('confirmationPopup').style.display = 'none';
+        if(confirmed){
+            deleteDatabase(selectedDatabase);
+        }
+    }
 
     function refresh(){
         window.location.href=serverUrl+'web/database/'+ serverName;
@@ -99,8 +113,11 @@
         window.location.href=serverUrl+'web/tables/'+ serverName+'/'+databaseName;
     }
 
+    function deleteDatabasePopup(databaseName) {
+        document.getElementById('confirmationPopup').style.display = 'block';
+        selectedDatabase=databaseName;
+    }
     function deleteDatabase(databaseName) {
-
         const databaseServer = {
             serverName: serverName,
             databaseName: databaseName
