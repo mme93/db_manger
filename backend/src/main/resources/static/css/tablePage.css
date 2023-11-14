@@ -6,7 +6,7 @@
 }
 
 .table-overview table {
-    width: 100%;
+    width: auto;
     border-collapse: collapse;
     border: 1px solid black;
 }
@@ -21,4 +21,46 @@
 
 .table-overview input {
     width: 98%;
+}
+
+.add_dataset_container {
+    width: 80%;
+    background-color: #FFA500;
+    border: black solid 3px;
+    visibility: hidden;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: black;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+
+.add_dataset_row{
+    width: 100%;
+}
+.add_dataset_row input {
+    width: 80%;
+}
+.add_dataset_row p {
+    display: inline-block;
+    width: 20%;
+}
+
+.add_dataset_button_container{
+    margin: 15px;
+    width: 100%;
+}
+.add_dataset_button_container button{
+    width: 49%;
+    background-color: #f3b248;
+}
+.add_dataset_button_container button:hover{
+    width: 49%;
+    background-color: #ffa81e;
 }

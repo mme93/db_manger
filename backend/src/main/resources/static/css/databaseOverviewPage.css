@@ -10,6 +10,9 @@
     margin-left: 7vw;
     margin-right: 7vw;
 }
+.database_panel tr{
+    background-color: #FFA500;
+}
 
 .flex-container {
     display: flex;

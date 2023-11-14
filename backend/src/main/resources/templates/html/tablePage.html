@@ -13,9 +13,24 @@
 
 <h4 th:text="${tableView.tableName}">[tableView.tableName]</h4>
 
-<button id="addButton" style="width: 100%">Add</button>
 
-<div class="table-overview" style="width: 100%;">
+<div class="add_dataset_container" id="addDataPopUp">
+    <h4>New Dataset</h4>
+    <div>
+        <div th:each="tableColumn : ${tableView.tableColumns}" class="add_dataset_row">
+            <p th:text="${tableColumn.columnName}"></p>
+            <input type="text" th:id="${tableColumn.columnName}">
+        </div>
+    </div>
+    <div class="add_dataset_button_container">
+        <button>Add</button>
+        <button onclick="closeDialog()">Close</button>
+    </div>
+</div>
+<button id="addButton" style="width: 100%" onclick="addDataset()">Add</button>
+
+
+<div class="table-overview">
     <table>
         <tr>
             <th id="columnId" th:each="tableColumn : ${tableView.tableColumns}">
@@ -35,13 +50,19 @@
 
 <script type="text/javascript" th:inline="javascript">
     let editedValues = [[${tableView}]];
-    let isChange=false;
+    let isChange = false;
     initPage();
 
+    function addDataset(){
+        document.getElementById('addDataPopUp').style.visibility="visible"
+    }
+    function closeDialog(){
+        document.getElementById('addDataPopUp').style.visibility="hidden"
+    }
 
     function convertToInput(spanElement) {
-        const searchColumnName=spanElement.getAttribute('data-columnInfo').split('|')[1];
-        const searchColumnId=spanElement.getAttribute('data-columnInfo').split('|')[0]
+        const searchColumnName = spanElement.getAttribute('data-columnInfo').split('|')[1];
+        const searchColumnId = spanElement.getAttribute('data-columnInfo').split('|')[0]
         const existingInput = spanElement.nextSibling;
         if (existingInput && existingInput.tagName === 'INPUT') {
             return;
@@ -64,7 +85,7 @@
             }
         });
         inputElement.addEventListener('input', function () {
-            updateModel(inputElement.value,searchColumnName,searchColumnId);
+            updateModel(inputElement.value, searchColumnName, searchColumnId);
 
         });
 
@@ -82,34 +103,33 @@
     }
 
 
-    function initPage(){
-        const columnSize=editedValues.tableSize;
-        if(columnSize>8){
+    function initPage() {
+        const columnSize = editedValues.tableSize;
+        if (columnSize > 8) {
             document.getElementById('columnId').style.width = (100 / columnSize) + '%';
-        }else{
+        } else {
             document.getElementById('columnId').style.width = 20 + '%';
         }
         document.getElementById('headerId').style.width = 100 + '%';
-
     }
 
-    function saveData(){
+    function saveData() {
 
-        isChange=false;
+        isChange = false;
     }
 
-    function updateModel(updatedValue,searchColumnName,searchColumnId) {
+    function updateModel(updatedValue, searchColumnName, searchColumnId) {
         for (let i = 0; i < editedValues.tableMetaRows.length; i++) {
-            const resultId=editedValues.tableMetaRows[i].tableMetaColumns[0].value;
-            if(resultId ===searchColumnId){
-                for(let j = 0; j < editedValues.tableMetaRows[i].tableMetaColumns.length; j++){
-                    if(editedValues.tableMetaRows[i].tableMetaColumns[j].columnName === searchColumnName){
-                        editedValues.tableMetaRows[i].tableMetaColumns[j].value=updatedValue;
+            const resultId = editedValues.tableMetaRows[i].tableMetaColumns[0].value;
+            if (resultId === searchColumnId) {
+                for (let j = 0; j < editedValues.tableMetaRows[i].tableMetaColumns.length; j++) {
+                    if (editedValues.tableMetaRows[i].tableMetaColumns[j].columnName === searchColumnName) {
+                        editedValues.tableMetaRows[i].tableMetaColumns[j].value = updatedValue;
                     }
                 }
             }
         }
-        isChange=true;
+        isChange = true;
     }
 
 </script>
