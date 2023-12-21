@@ -87,6 +87,12 @@ public class TableObject {
                 tableMetaColumn.setColumnName(tableColumn.getColumnName());
                 tableMetaColumn.setValue(String.valueOf(result));
                 tableMetaColumns.add(tableMetaColumn);
+            }else if (matchColumnType(tableColumn.getColumnType(), Enum.class)) {
+                TableMetaColumn tableMetaColumn = new TableMetaColumn();
+                String result = resultSet.getString(tableColumn.getColumnName());
+                tableMetaColumn.setColumnName(tableColumn.getColumnName());
+                tableMetaColumn.setValue(String.valueOf(result));
+                tableMetaColumns.add(tableMetaColumn);
             } else {
                 throw new SQLException("No column typ found from typ: " + tableColumn.getColumnType());
             }
@@ -97,8 +103,9 @@ public class TableObject {
 
     public boolean matchColumnType(String columnType, Class typeClass) {
         String[] stringTypes = {"varchar", "text"};
-        String[] intTypes = {"bigint"};
+        String[] intTypes = {"bigint","int"};
         String[] floatTypes = {"decimal"};
+        String[] enumTypes = {"enum"};
         switch (getTypeClassSimpleName(typeClass)) {
             case "String":
                 if (containsColumnTypes(columnType, stringTypes)) return true;
@@ -108,6 +115,9 @@ public class TableObject {
                 break;
             case "Float":
                 if (containsColumnTypes(columnType, floatTypes)) return true;
+                break;
+            case "Enum":
+                if (containsColumnTypes(columnType, enumTypes)) return true;
                 break;
             default:
                 return false;
